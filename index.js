@@ -1,36 +1,64 @@
-const WebSocket = require('ws');
-const http = require('http');
-const websocketModule = require('./websocket/TestClass');
-const connect = require('./db/connect');
-// const Manager = require('./schemas/Managers');
+const express = require('express');
+const authenticate = require('./servers/Auth');
+const {getAllManagers, connectToDatabase, disconnectFromDatabase, getTasks, getProjectTypes, getProjects, getDevelopers} = require('./servers/MongoServer');
 
-// Initialize HTTP server
-const server = http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end('WebSocket server is running');
+connectToDatabase();
+
+const app = express();
+app.use(authenticate);
+app.use(express.json());
+app.get('/api/managers', async (req, res) => {
+    try {
+        const managers = await getAllManagers();
+        res.json(managers);
+    } catch (error) {
+        res.status(500).send();
+    }
+});
+app.get('/api/tasks', async (req, res) => {
+    try {
+        const tasks = await getTasks();
+        res.json(tasks);
+    } catch (error) {
+        res.status(500).send();
+    }
+});
+app.get('/api/developers', async (req, res) => {
+    try {
+        const developers = await getDevelopers();
+        res.json(developers);
+    } catch (error) {
+        res.status(500).send();
+    }
+});
+app.get('/api/projects', async (req, res) => {
+    try {
+        const projects = await getProjects();
+        res.json(projects);
+    } catch (error) {
+        res.status(500).send();
+    }
+});
+app.get('/api/projecttypes', async (req, res) => {
+    try {
+        const projectTypes = await getProjectTypes();
+        res.json(projectTypes);
+    } catch (error) {
+        res.status(500).send();
+    }
 });
 
-// Initialize WebSocket server
-const wss = new WebSocket.Server({ server });
+// app.get('')
 
-websocketModule(wss);
 
-// Handle WebSocket connections
-wss.on('connection', (ws) => {
-    console.log('Client connected');
-
-    ws.on('message', (message) => {
-        console.log(`Received message: ${message}`);
-        ws.send(`Server received: ${message}`);
-    });
-
-    ws.on('close', () => {
-        console.log('Client disconnected');
-    });
+process.on('SIGINT', async () => {
+    console.log('Server Closed!');
+    await disconnectFromDatabase();
+    process.exit();
 });
 
-// Start the server
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}`);
+
+app.listen(PORT, () => {
+    console.log(`Express listens on ${PORT}`)
 });
