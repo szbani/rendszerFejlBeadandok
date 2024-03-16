@@ -1,7 +1,13 @@
 const managerSchema = require('../schemas/Managers');
 
 const authenticate = async (req, res, next) => {
-    const {email, password} = req.query;
+    const auth = req.headers['auth'];
+    if (!auth) {
+        // console.log("No authentication data provided");
+        res.status(401).json({message: 'No authentication data provided'}).send();
+        return;
+    }
+    const {email, password} = JSON.parse(auth);
 
     try {
         const manager = await managerSchema.findOne({email: email, password: password});
