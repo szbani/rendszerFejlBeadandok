@@ -4,6 +4,9 @@ const {connectToDatabase, disconnectFromDatabase} = require('./Mongo/MongoServer
 const getters = require('./express/ExpressGetters');
 const deletes = require('./express/ExpressDeletes');
 
+const swaggerUI = require('swagger-ui-express');
+const swaggerSpec = require('./swagger');
+
 const cors = require('cors');
 
 const corsOptions = {
@@ -21,10 +24,14 @@ app.use(express.json());
 app.use(cors(corsOptions));
 
 // app.use(authenticate);
+app.use((req, res, next) => {
+    console.log("Request: ", req.method, req.url);
+    next();
+});
 
 app.use('/api', getters);
 app.use('/api',deletes);
-// app.get('')
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 
 
 process.on('SIGINT', async () => {

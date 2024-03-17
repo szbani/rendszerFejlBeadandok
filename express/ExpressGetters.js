@@ -4,17 +4,10 @@ const router = express.Router();
 const {getAllManagers, getManagerById} = require("../getters/ManagerGetters");
 const {getDevelopersByProjectId, getDevelopers} = require("../getters/DeveloperGetters");
 const {
-    getTasks,
-    getTaskByTaskId,
-    getTasksByManagerId,
-    getTasksByManagerWithDeadlineInOneWeek,
-    getTasksByProjectId
+    getTasks, getTaskByTaskId, getTasksByManagerId, getTasksByManagerWithDeadlineInOneWeek, getTasksByProjectId
 } = require("../getters/TaskGetters");
 const {
-    getProjects,
-    getProjectByProjectId,
-    getProjectsByProjectTypeId,
-    getProjectTypes
+    getProjects, getProjectByProjectId, getProjectsByProjectTypeId, getProjectTypes
 } = require("../getters/ProjectGetters");
 
 router.get('/', (req, res) => {
@@ -23,13 +16,6 @@ router.get('/', (req, res) => {
     }
     res.send(welcomeMessage);
 });
-
-// app.use(authenticate);
-router.use((req, res, next) => {
-    console.log("Request: ", req.method, req.url);
-    next();
-});
-
 router.get('/managers', async (req, res) => {
     try {
         const managers = await getAllManagers();

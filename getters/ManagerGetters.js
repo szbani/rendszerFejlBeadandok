@@ -2,7 +2,7 @@ const managerSchema = require("../schemas/Managers");
 
 async function getAllManagers() {
     try {
-        const managers = await managerSchema.find({});
+        const managers = await managerSchema.find({}, {password: 0});
         return managers;
     } catch (error) {
         console.log("Error getting managers: ", error);

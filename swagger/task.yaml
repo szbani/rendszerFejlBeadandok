@@ -1,0 +1,93 @@
+openapi: 3.0.3
+info:
+  title: Task API
+  version: 1.0.0
+  description: Task API
+tags:
+    - name: task
+      description: Task operations
+paths:
+  /api/tasks:
+    get:
+      tags:
+        - task
+      summary: Get all tasks
+      operationId: getTasks
+      responses:
+        '200':
+          description: A list of tasks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tasks'
+              example:
+                - _id: "65f3acb946a8a82e961b3fb9"
+                  name: "Task 1"
+                  description: "Description 1"
+                  project_id: "65f60f8a89f811c81cef5238"
+                  user_id: "65f3acb946a8a82e961b3fb9"
+                  deadline: "2021-12-31T23:59:59.999Z"
+                - _id: "65f3acb946a8a82e961b3fb9"
+                  name: "Task 2"
+                  description: "Description 2"
+                  project_id: "65f60f8a89f811c81cef5238"
+                  user_id: "65f3acb946a8a82e961b3fb9"
+                  deadline: "2021-12-31T23:59:59.999Z"
+  /api/task/{taskId}:
+    get:
+      tags:
+        - task
+      summary: Get a task by id
+      operationId: getTaskById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          example: "65f3acb946a8a82e961b3fb9"
+      responses:
+        '200':
+          description: A task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+              example:
+                _id: "65f3acb946a8a82e961b3fb9"
+                name: "Task 1"
+                description: "Description 1"
+                project_id: "65f60f8a89f811c81cef5238"
+                user_id: "65f3acb946a8a82e961b3fb9"
+                deadline: "2021-12-31T23:59:59.999Z"
+
+components:
+    schemas:
+      Task:
+        type: object
+        properties:
+          _id:
+            type: string
+            example: "65f3acb946a8a82e961b3fb9"
+          name:
+            type: string
+            example: "Task 1"
+          description:
+            type: string
+            example: "Description 1"
+          project_id:
+            type: string
+            example: "65f60f8a89f811c81cef5238"
+          user_id:
+            type: string
+            example: "65f3acb946a8a82e961b3fb9"
+          deadline:
+            type: string
+            format: date-time
+            example: "2021-12-31T23:59:59.999Z"
+      Tasks:
+        type: array
+        items:
+          $ref: '#/components/schemas/Task'
+
+  
