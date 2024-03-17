@@ -2,8 +2,13 @@ const express = require('express');
 const authenticate = require('./Mongo/Auth');
 const {connectToDatabase, disconnectFromDatabase} = require('./Mongo/MongoServer');
 const cors = require('cors');
-const {getProjects, getProjectTypes, getProjectByProjectId, getProjectsByProjectTypeId} = require("./getters/ProjectGetters");
-const {getTasksByProjectId, getTasks, getTasksByManagerId, getTaskByTaskId} = require("./getters/TaskGetters");
+const {
+    getProjects,
+    getProjectTypes,
+    getProjectByProjectId,
+    getProjectsByProjectTypeId
+} = require("./getters/ProjectGetters");
+const {getTasksByProjectId, getTasks, getTasksByManagerId, getTaskByTaskId, getTasksByManagerWithDeadlineInOneWeek} = require("./getters/TaskGetters");
 const {getDevelopersByProjectId, getDevelopers} = require("./getters/DeveloperGetters");
 const {getAllManagers, getManagerById} = require("./getters/ManagerGetters");
 
@@ -60,13 +65,14 @@ app.get('/api/manager/:id/tasks', async (req, res) => {
         res.status(500).send();
     }
 });
-app.get('/api/manager/:id/deadline', async (req, res) => {
-   try {
-       const managerID = req.params.id;
-       const tasks = await getTasksByManagerId(managerID);
-       const deadlines = tasks.map(task => task.deadline);
-       res.json(deadlines);
-    //todo
+app.get('/api/manager/:id/deadlines', async (req, res) => {
+    try {
+        const managerID = req.params.id;
+        const tasksWithDeadline = await getTasksByManagerWithDeadlineInOneWeek(managerID);
+        res.json(tasksWithDeadline);
+    } catch (error) {
+        res.status(500).send();
+    }
 });
 app.get('/api/tasks', async (req, res) => {
     try {

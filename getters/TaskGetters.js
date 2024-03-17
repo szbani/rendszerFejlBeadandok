@@ -22,12 +22,18 @@ async function getTasksByManagerId(managerId) {
     return taskSchema.find({user_id: managerId});
 }
 
-async function getTasksByManagerWithDeadline(managerId, deadline) {
-
+async function getTasksByManagerWithDeadlineInOneWeek(managerId) {
+    const currDate = new Date();
+    let date = new Date(currDate);
+    date.setDate(currDate.getDate() + 7);
+    console.log(date);
+    return taskSchema.find({user_id: managerId, deadline: {$lte: date}});
 }
+
 module.exports = {
     getTasks,
     getTasksByProjectId,
     getTaskByTaskId,
-    getTasksByManagerId
+    getTasksByManagerId,
+    getTasksByManagerWithDeadlineInOneWeek
 }
