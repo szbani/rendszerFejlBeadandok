@@ -8,8 +8,8 @@ const managerData = {
 }
 header.append('auth', JSON.stringify(managerData));
 
-fetch('http://localhost:8080/api/managers', {
-    method: 'GET',
+fetch('http://localhost:8080/api/developer/65f42e2750a97015b6c7e849', {
+    method: 'DELETE',
     headers: header,
     // : JSON.stringify(managerData)
 })
