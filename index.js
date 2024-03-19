@@ -1,44 +1,24 @@
-const express = require('express');
-const authenticate = require('./Mongo/Auth');
-const {connectToDatabase, disconnectFromDatabase} = require('./Mongo/MongoServer');
-const getters = require('./express/ExpressGetters');
-const deletes = require('./express/ExpressDeletes');
+const WebSocket = require('ws');
+const http = require('http');
+const createWebSocketServer = require('./websocket/ws');
+const auth = require('./websocket/auth');
+const {connectToDatabase} = require('./Mongo/MongoServer');
 
-const swaggerUI = require('swagger-ui-express');
-const swaggerSpec = require('./swagger');
-
-const cors = require('cors');
-
-const corsOptions = {
-    origin: '*',
-    optionsSuccessStatus: 200,
-    contentType: 'application/json',
-}
-
-const PORT = process.env.PORT || 8080;
+// const Manager = require('./schemas/Managers');
 
 connectToDatabase();
 
-const app = express();
-app.use(express.json());
-app.use(cors(corsOptions));
-
-// app.use(authenticate);
-app.use((req, res, next) => {
-    console.log("Request: ", req.method, req.url);
-    next();
+// Initialize HTTP server
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('WebSocket server is running');
 });
 
-app.use('/api', getters);
-app.use('/api',deletes);
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+// Initialize WebSocket server
+const wss = createWebSocketServer(server);
 
-
-process.on('SIGINT', async () => {
-    console.log('Server Closed!');
-    await disconnectFromDatabase();
-    process.exit();
-});
-app.listen(PORT, () => {
-    console.log(`Express listens on ${PORT}`)
+// Start the server
+const PORT = process.env.PORT || 8080;
+server.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}`);
 });

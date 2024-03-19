@@ -1,5 +1,6 @@
 const managerSchema = require('../schemas/Managers');
 
+//todo rewrite to websocket
 const authenticate = async (req, res, next) => {
     const auth = req.headers['auth'];
     if (!auth) {
