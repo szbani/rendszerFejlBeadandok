@@ -7,10 +7,24 @@ ws.onopen = function (e) {
     // ws.send('Hello Server');
     ws.send(JSON.stringify(
         {
-            type: 'getAllManagers',
-            action: 'GET'
+            action: 'AUTH',
+            email: 'hujeno@gmail.com',
+            password: 'password'
         }
     ));
+
+    setTimeout(() => {
+        ws.send(JSON.stringify(
+            {
+                action: 'GET',
+                type: 'getManagers',
+            }));
+        // ws.send(JSON.stringify(
+        //     {
+        //         action: 'GET',
+        //         type: 'getProjects',
+        //     }));
+    },5000);
 }
 
 ws.onmessage = function (e) {
@@ -24,5 +38,6 @@ ws.onclose = function (e) {
 ws.onerror = function (e) {
     console.log('Error: ' + e.data);
 }
+
 
 

@@ -11,7 +11,7 @@ const {
 module.exports = async (jsonMessage,ws) => {
     let tasks;
     switch (jsonMessage.type) {
-        case 'getAllManagers':
+        case 'getManagers':
             const managers = await getAllManagers();
             ws.send(JSON.stringify(managers));
             break;
