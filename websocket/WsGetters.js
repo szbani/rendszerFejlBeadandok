@@ -63,5 +63,7 @@ module.exports = async (jsonMessage,ws) => {
             const projectTypes = await getProjectTypes();
             ws.send(JSON.stringify(projectTypes));
             break;
+        default:
+            ws.send(JSON.stringify({error: 'Unknown type'}));
     }
 }
