@@ -10,6 +10,7 @@ const mongoose = require("mongoose");
 
 module.exports = async (jsonMessage, ws) => {
     let errors = [];
+    let doc;
     switch (jsonMessage.type) {
         case 'updateManager':
             if (jsonMessage._id == undefined) {
@@ -45,13 +46,15 @@ module.exports = async (jsonMessage, ws) => {
                 return;
             }
 
-            managerSchema.findByIdAndUpdate(jsonMessage._id, jsonMessage, {new: true}, (err, doc) => {
-                if (err) {
-                    console.log("Something wrong when updating data!");
-                    ws.send(JSON.stringify({error: 'Error updating manager'}));
-                }
-                ws.send(JSON.stringify({message: 'Manager updated'}));
+            doc = await managerSchema.findByIdAndUpdate(jsonMessage._id, jsonMessage, {
+                new: true,
+                includeResultMetadata: true
             });
+            if (doc.lastErrorObject.updatedExisting) {
+                ws.send(JSON.stringify({message: 'Manager updated'}));
+            } else {
+                ws.send(JSON.stringify({error: 'Error updating manager'}));
+            }
             break;
         case 'updateDeveloper':
             if (jsonMessage._id == undefined) {
@@ -81,20 +84,22 @@ module.exports = async (jsonMessage, ws) => {
                 return;
             }
 
-            developerSchema.findByIdAndUpdate(jsonMessage._id, jsonMessage, {new: true}, (err, doc) => {
-                if (err) {
-                    console.log("Something wrong when updating data!");
-                    ws.send(JSON.stringify({error: 'Error updating developer'}));
-                }
-                ws.send(JSON.stringify({message: 'Developer updated'}));
+            doc = await developerSchema.findByIdAndUpdate(jsonMessage._id, jsonMessage, {
+                new: true,
+                includeResultMetadata: true
             });
+            if (doc.lastErrorObject.updatedExisting) {
+                ws.send(JSON.stringify({message: 'Developer updated'}));
+            } else {
+                ws.send(JSON.stringify({error: 'Error updating developer'}));
+            }
             break;
         case 'updateProject':
             if (jsonMessage._id == undefined) {
                 errors.push('Id is required');
             } else if (!mongoose.Types.ObjectId.isValid(jsonMessage._id)) {
                 errors.push('Invalid id');
-            } else if (!await projectSchema.findById(jsonMessage._id)){
+            } else if (!await projectSchema.findById(jsonMessage._id)) {
                 errors.push('Project does not exist');
             }
 
@@ -117,13 +122,15 @@ module.exports = async (jsonMessage, ws) => {
                 return;
             }
 
-            projectSchema.findByIdAndUpdate(jsonMessage._id, jsonMessage, {new: true}, (err, doc) => {
-                if (err) {
-                    console.log("Something wrong when updating data!");
-                    ws.send(JSON.stringify({error: 'Error updating project'}));
-                }
-                ws.send(JSON.stringify({message: 'Project updated'}));
+            doc = await projectSchema.findByIdAndUpdate(jsonMessage._id, jsonMessage, {
+                new: true,
+                includeResultMetadata: true
             });
+            if (doc.lastErrorObject.updatedExisting) {
+                ws.send(JSON.stringify({message: 'Project updated'}));
+            } else {
+                ws.send(JSON.stringify({error: 'Error updating project'}));
+            }
             break;
         case 'updateTask':
             if (jsonMessage._id == undefined) {
@@ -149,11 +156,11 @@ module.exports = async (jsonMessage, ws) => {
             }
 
             if (jsonMessage.user_id == undefined) {
-                errors.push('Developer is required');
+                errors.push('Manager(user_id) is required');
             } else if (!mongoose.Types.ObjectId.isValid(jsonMessage.user_id)) {
-                errors.push('Invalid developer_id');
-            } else if (!await developerSchema.findById(jsonMessage.user_id)) {
-                errors.push('Manager does not exist');
+                errors.push('Invalid manager_id(user_id)');
+            } else if (!await managerSchema.findById(jsonMessage.user_id)) {
+                errors.push('Manager(user_id) does not exist');
             }
 
             if (jsonMessage.deadline == undefined) {
@@ -167,13 +174,15 @@ module.exports = async (jsonMessage, ws) => {
                 return;
             }
 
-            taskSchema.findByIdAndUpdate(jsonMessage._id, jsonMessage, {new: true}, (err, doc) => {
-                if (err) {
-                    console.log("Something wrong when updating data!");
-                    ws.send(JSON.stringify({error: 'Error updating task'}));
-                }
-                ws.send(JSON.stringify({message: 'Task updated'}));
+            doc = await taskSchema.findByIdAndUpdate(jsonMessage._id, jsonMessage, {
+                new: true,
+                includeResultMetadata: true
             });
+            if (doc.lastErrorObject.updatedExisting) {
+                ws.send(JSON.stringify({message: 'Task updated'}));
+            } else {
+                ws.send(JSON.stringify({error: 'Error updating task'}));
+            }
             break;
         case 'updateProjectType':
             if (jsonMessage._id == undefined) {
@@ -197,13 +206,16 @@ module.exports = async (jsonMessage, ws) => {
                 return;
             }
 
-            projectTypeSchema.findByIdAndUpdate(jsonMessage._id, jsonMessage, {new: true}, (err, doc) => {
-                if (err) {
-                    console.log("Something wrong when updating data!");
-                    ws.send(JSON.stringify({error: 'Error updating project_type'}));
-                }
-                ws.send(JSON.stringify({message: 'Project_Type updated'}));
+            doc = await projectTypeSchema.findByIdAndUpdate(jsonMessage._id, jsonMessage, {
+                new: true,
+                includeResultMetadata: true
             });
+
+            if (doc.lastErrorObject.updatedExisting) {
+                ws.send(JSON.stringify({message: 'ProjectType updated'}));
+            } else {
+                ws.send(JSON.stringify({error: 'Error updating projectType'}));
+            }
             break;
         case 'updateProjectDeveloper':
             if (jsonMessage.projectDev_id == undefined) {
@@ -235,13 +247,15 @@ module.exports = async (jsonMessage, ws) => {
                 return;
             }
 
-            projectDevSchema.findByIdAndUpdate(jsonMessage.project_id, jsonMessage, {new: true}, (err, doc) => {
-                if (err) {
-                    console.log("Something wrong when updating data!");
-                    ws.send(JSON.stringify({error: 'Error updating project_developer'}));
-                }
-                ws.send(JSON.stringify({message: 'Project_Developer updated'}));
+            doc = await projectDevSchema.findByIdAndUpdate(jsonMessage.project_id, jsonMessage, {
+                new: true,
+                includeResultMetadata: true
             });
+            if (doc.lastErrorObject.updatedExisting) {
+                ws.send(JSON.stringify({message: 'ProjectDeveloper updated'}));
+            } else {
+                ws.send(JSON.stringify({error: 'Error updating projectDeveloper'}));
+            }
             break;
         default:
             ws.send(JSON.stringify({error: 'Invalid type'}));

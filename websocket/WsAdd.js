@@ -106,11 +106,11 @@ module.exports = async (jsonMessage, ws) => {
             }
 
             if (jsonMessage.user_id == undefined) {
-                errors.push('userId(Manager) is required');
+                errors.push('Manager(user_id) is required');
             } else if (!mongoose.Types.ObjectId.isValid(jsonMessage.user_id)) {
-                errors.push('Invalid user_id');
+                errors.push('Invalid manager(user_id)');
             } else if (!await managerSchema.findById(jsonMessage.user_id)) {
-                errors.push('Manager not found');
+                errors.push('Manager(user_id) not found');
             }
 
             if (jsonMessage.deadline == undefined) {
