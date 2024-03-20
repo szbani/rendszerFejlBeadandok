@@ -2,7 +2,7 @@ const WebSocket = require('ws');
 
 const ws = new WebSocket('ws://localhost:8080');
 
-ws.onopen = async function (e) {
+ws.onopen = async function () {
     console.log('Connected');
     // ws.send('Hello Server');
     ws.send(JSON.stringify(
@@ -17,10 +17,11 @@ ws.onopen = async function (e) {
         ws.send(JSON.stringify(
             {
                 action: 'UPLOAD',
-                type: 'addManager',
-                name: 'Deb Ella',
-                email: 'debellagmail.com',
-                password: 'password'
+                type: 'addTask',
+                name: 'task test',
+                project_id: '65f3b74b77df5262b3453221',
+                user_id: '65f3acb946a8a82e961b3fb9',
+                deadline: '2025-06-25',
             }));
     //      ws.send(JSON.stringify(
     //         {
@@ -42,7 +43,7 @@ ws.onmessage = function (e) {
     console.log('Received: ' + e.data);
 }
 
-ws.onclose = function (e) {
+ws.onclose = function () {
     console.log('Disconnected');
 }
 

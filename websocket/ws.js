@@ -2,8 +2,9 @@ const Websocket = require('ws');
 const wsGetters = require('./WsGetters');
 const wsDeletes = require('./WsDeletes');
 const wsAdd = require('./WsAdd');
-const authenticate = require('./Auth');
+const wsUpdate = require('./wsUpdate');
 
+const authenticate = require('./Auth');
 function createWebSocketServer(server) {
     const ws = new Websocket.Server({server});
 
@@ -46,8 +47,7 @@ function createWebSocketServer(server) {
                         wsAdd(jsonMessage,ws)
                         break;
                     case "UPDATE":
-                        //todo: Needs Implementation
-                        //wsUpdate(jsonMessage,ws)
+                        wsUpdate(jsonMessage,ws)
                         break;
                     default:
                         ws.send(JSON.stringify({error: 'Unknown action'}));
