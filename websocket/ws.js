@@ -1,6 +1,7 @@
 const Websocket = require('ws');
 const wsGetters = require('./WsGetters');
 const wsDeletes = require('./WsDeletes');
+const wsAdd = require('./WsAdd');
 const authenticate = require('./Auth');
 
 function createWebSocketServer(server) {
@@ -22,7 +23,7 @@ function createWebSocketServer(server) {
             }
             if (!isAuth) {
                 if (jsonMessage.action == 'AUTH') {
-                    authenticate(jsonMessage).then((result) => {
+                    authenticate.auth(jsonMessage).then((result) => {
                         if (result) {
                             isAuth = true;
                             ws.send(JSON.stringify({message: 'Authenticated'}));
@@ -42,8 +43,7 @@ function createWebSocketServer(server) {
                         wsDeletes(jsonMessage, ws);
                         break;
                     case "UPLOAD":
-                        //todo: Needs Implementation
-                        //wsUpload(jsonMessage,ws)
+                        wsAdd(jsonMessage,ws)
                         break;
                     case "UPDATE":
                         //todo: Needs Implementation
