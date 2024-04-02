@@ -8,6 +8,9 @@ function App() {
   const ws = wsConnect();
   return (
     <div className="App">
+      <head>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+      </head>
       <header className="App-header">
         <h1>Redmine</h1>
       </header>
@@ -15,7 +18,9 @@ function App() {
       <Container>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="h4" gutterBottom>
+          <Typography variant="h4" gutterBottom
+          sx={{ mt: 2 }}
+          >
             Elérhető projektek
           </Typography>
 
@@ -28,6 +33,7 @@ function App() {
             Új feladat felvétele
           </Typography>
           <TextField
+            sx={{ mb: 2 }}
             label="Feladat neve"
             variant="outlined"
             fullWidth
@@ -35,6 +41,7 @@ function App() {
             //onChange={(e) => setNewTaskName(e.target.value)}
           />
           <TextField
+            sx={{ mb: 2 }}
             label="Feladat leírása"
             variant="outlined"
             fullWidth
@@ -44,6 +51,7 @@ function App() {
             //onChange={(e) => setNewTaskDescription(e.target.value)}
           />
           <Select
+            sx={{ mb: 2 }}
             //value={selectedDeveloper}
             //onChange={(e) => setSelectedDeveloper(e.target.value)}
             fullWidth
