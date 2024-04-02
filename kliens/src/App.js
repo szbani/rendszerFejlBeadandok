@@ -1,25 +1,73 @@
 import logo from './logo.svg';
 import './App.css';
 //const WebSocket = require('ws');
+import { Container, Grid, Typography, TextField, Button, Select, MenuItem } from '@mui/material';
+//import * as mui from '@material-ui/core';
 
 function App() {
   const ws = wsConnect();
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Redmine</h1>
       </header>
+      <body>
+      <Container>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Typography variant="h4" gutterBottom>
+            Elérhető projektek
+          </Typography>
+
+        </Grid>
+        <Grid item xs={12}>
+        
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h4" gutterBottom>
+            Új feladat felvétele
+          </Typography>
+          <TextField
+            label="Feladat neve"
+            variant="outlined"
+            fullWidth
+            //value={newTaskName}
+            //onChange={(e) => setNewTaskName(e.target.value)}
+          />
+          <TextField
+            label="Feladat leírása"
+            variant="outlined"
+            fullWidth
+            multiline
+            rows={4}
+            //value={newTaskDescription}
+            //onChange={(e) => setNewTaskDescription(e.target.value)}
+          />
+          <Select
+            //value={selectedDeveloper}
+            //onChange={(e) => setSelectedDeveloper(e.target.value)}
+            fullWidth
+            displayEmpty
+            defaultValue=""
+          >
+            <MenuItem value="" disabled>
+              Válassz fejlesztőt
+            </MenuItem>
+           
+          </Select>
+          <Button variant="contained" color="primary">
+            Feladat hozzáadása
+          </Button>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h4" gutterBottom>
+            Menedzser által létrehozott feladatok
+          </Typography>
+          {/* Menedzser által létrehozott feladatok listázása */}
+        </Grid>
+      </Grid>
+    </Container>
+      </body>
     </div>
   );
 }
