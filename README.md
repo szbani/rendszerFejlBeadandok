@@ -12,6 +12,7 @@
 ### Projekt modulok telepítése
   - Megnyitjuk a projeknek a mappáját cmd vagy a fejlesztői környezetünkben.
   - A konzolba beírjuk a(z) **npm i** parancsot.
+  - Ezután a(z) **npm install @mui/material @emotion/react @emotion/styled** parancsot.
 
 ### Server futtatása
   - Megnyitjuk a projeknek a mappáját cmd vagy a fejlesztői környezetünkben.
