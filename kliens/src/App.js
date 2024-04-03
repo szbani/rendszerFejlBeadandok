@@ -1,10 +1,11 @@
-import logo from './logo.svg';
 import './App.css';
 //const WebSocket = require('ws');
 import { Container, Grid, Typography, TextField, Button, Select, MenuItem } from '@mui/material';
 //import * as mui from '@material-ui/core';
+//import { useState } from 'react';
 
 function App() {
+  //const [projects, setProjects] = useState([]);
   const ws = wsConnect();
   return (
     <div className="App">
@@ -26,7 +27,7 @@ function App() {
 
         </Grid>
         <Grid item xs={12}>
-        
+          {/* insert projects */}
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h4" gutterBottom>
@@ -93,6 +94,7 @@ function wsConnect() {
             password: 'password'
         }
     ));
+    fetchProjects();
 
     setTimeout(() => {
         // ws.send(JSON.stringify(
@@ -120,11 +122,11 @@ function wsConnect() {
         //         type: 'deleteTask',
         //         _id: '65fb4f8762c10f7c88f40f9c'
         //     }));
-          ws.send(JSON.stringify(
-             {
-                 action: 'GET',
-                 type: 'getProjects',
-             }));
+          // ws.send(JSON.stringify(
+          //    {
+          //        action: 'GET',
+          //        type: 'getProjects',
+          //    }));
     //     ws.send(JSON.stringify(
     //         {
     //             action: 'UPLOAD',
@@ -137,8 +139,34 @@ function wsConnect() {
 
 }
 
+function fetchProjects() {
+  console.log('Fetching...');
+  ws.send(JSON.stringify(
+    {
+        action: 'GET',
+        type: 'getProjects',
+    }));
+  ws.onmessage = function (e) {
+    console.log('Received data: ' + e.data);
+    
+     // const received = JSON.parse(e.data);
+     // const obj = received[0];
+      listProjects(JSON.parse(e.data));
+ 
+    
+  }
+}
+
+function listProjects(projects) {
+  if (projects.hasOwnProperty('message')){
+    console.log('Listázás: ' + projects.message);
+  }
+  
+}
+
 ws.onmessage = function (e) {
     console.log('Received: ' + e.data);
+    //const received = JSON.parse(e.data);
 }
 
 ws.onclose = function () {
