@@ -1,4 +1,4 @@
-const managerSchema = require('../schemas/Managers');
+const managerSchema = require('../../schemas/Managers');
 
 module.exports.auth = async (jsonMessage) => {
     const manager = await managerSchema.findOne({email: jsonMessage.email});

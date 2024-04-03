@@ -1,6 +1,6 @@
-const projectSchema = require("../schemas/Projects");
-const projectTypeSchema = require("../schemas/Project_Types");
-const projectDeveloperSchema = require("../schemas/Project_Developers");
+const projectSchema = require("../../schemas/Projects");
+const projectTypeSchema = require("../../schemas/Project_Types");
+const projectDeveloperSchema = require("../../schemas/Project_Developers");
 
 async function getProjects() {
     try {
