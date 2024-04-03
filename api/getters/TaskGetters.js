@@ -1,4 +1,4 @@
-const taskSchema = require("../schemas/Tasks");
+const taskSchema = require("../../schemas/Tasks");
 
 async function getTasks() {
     try {

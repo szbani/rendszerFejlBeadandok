@@ -1,4 +1,4 @@
-const Websocket = require('ws');
+const Websocket = require('api/websocket/ws');
 const wsGetters = require('./WsGetters');
 const wsDeletes = require('./WsDeletes');
 const wsAdd = require('./WsAdd');

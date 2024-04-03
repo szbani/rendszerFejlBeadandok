@@ -1,4 +1,4 @@
-const managerSchema = require("../schemas/Managers");
+const managerSchema = require("../../schemas/Managers");
 
 async function getAllManagers() {
     try {

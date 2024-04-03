@@ -1,9 +1,9 @@
-const managerSchema = require("../schemas/Managers");
-const developerSchema = require("../schemas/Developers");
-const projectSchema = require("../schemas/Projects");
-const taskSchema = require("../schemas/Tasks");
-const projectTypeSchema = require("../schemas/Project_Types");
-const projectDevSchema = require("../schemas/Project_Developers");
+const managerSchema = require("../../schemas/Managers");
+const developerSchema = require("../../schemas/Developers");
+const projectSchema = require("../../schemas/Projects");
+const taskSchema = require("../../schemas/Tasks");
+const projectTypeSchema = require("../../schemas/Project_Types");
+const projectDevSchema = require("../../schemas/Project_Developers");
 
 const authenticate = require('./Auth');
 const mongoose = require("mongoose");

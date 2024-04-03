@@ -1,8 +1,8 @@
-const managerSchema = require("../schemas/Managers");
-const developerSchema = require("../schemas/Developers");
-const projectSchema = require("../schemas/Projects");
-const taskSchema = require("../schemas/Tasks");
-const projectDevSchema = require("../schemas/Project_Developers");
+const managerSchema = require("../../schemas/Managers");
+const developerSchema = require("../../schemas/Developers");
+const projectSchema = require("../../schemas/Projects");
+const taskSchema = require("../../schemas/Tasks");
+const projectDevSchema = require("../../schemas/Project_Developers");
 const mongoose = require("mongoose");
 
 
