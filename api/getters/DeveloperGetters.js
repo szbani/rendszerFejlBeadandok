@@ -1,5 +1,5 @@
-const projectDeveloperSchema = require("../schemas/Project_Developers");
-const developerSchema = require("../schemas/Developers");
+const projectDeveloperSchema = require("../../schemas/Project_Developers");
+const developerSchema = require("../../schemas/Developers");
 
 async function getDevelopers() {
     try {
