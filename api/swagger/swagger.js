@@ -9,7 +9,7 @@ const options = {
             description: 'University Project use description.',
         },
     },
-    apis: ['./swagger/*.yaml'],
+    apis: ['./api/swagger/*.yaml'],
 };
 
 const swaggerSpec = swaggerdoc(options);
