@@ -2,9 +2,12 @@ import './App.css';
 import React from 'react';
 import {Container, Grid, Typography, TextField, Button, Select, MenuItem} from '@mui/material';
 // import ws from "./ws/ws";
+import {Routes, Route} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 // import Test from './Test.js';
-import Projects from './templates/Projects.js';
+import Projects from './templates/Projects';
+import Tasks from './templates/Tasks';
 
 class App extends React.Component {
     constructor(props) {
@@ -15,12 +18,16 @@ class App extends React.Component {
             selectedDeveloper: '',
             isLoaded: true
         }
+        
     }
 
     componentDidMount() {
 
     }
-
+    
+    handleNavigateToTasks = () => {
+        this.props.history.push('tasks');
+    }
     render() {
         return (
             <div className="App">
@@ -31,16 +38,25 @@ class App extends React.Component {
                     <h1>Redmine</h1>
                 </header>
                 <body>
+                    
                 <Container>
                     <Grid container spacing={2}>
-                        <Grid item xs={12}>
+                       
+                            <Button onClick={this.handleNavigateToTasks} >
+                            Task
+                            </Button>
+                            <Routes>
+                                <Route path='/' element={Projects} />
+                                <Route path='/tasks' render={(props)=><Tasks {...props} projectID="65f3b74b77df5262b3453221"/>} />
+                            </Routes> 
+                        {/* <Grid item xs={12}>
                             <Typography variant="h4" gutterBottom sx={{mt: 2}}>
                                 Elérhető projektek
                             </Typography>
-                            {this.state.isLoaded ? <Projects></Projects> : <p>Connecting to server...</p>}
+                            
                         </Grid>
                         <Grid item xs={12}>
-
+                            <Tasks></Tasks>
                         </Grid>
                         <Grid item xs={12}>
                             <Typography variant="h4" gutterBottom>
@@ -80,7 +96,8 @@ class App extends React.Component {
                             <Button variant="contained" color="primary">
                                 Feladat hozzáadása
                             </Button>
-                        </Grid>
+                        </Grid> */}
+                       
                     </Grid>
                 </Container>
                 </body>

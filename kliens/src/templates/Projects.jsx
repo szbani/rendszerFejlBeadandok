@@ -20,7 +20,7 @@ class Projects extends React.Component {
                 {this.state.projects.length > 0 ?
                     <DataGrid
                         rows={this.state.projects.map((project) => project)}
-                        columns={[{field: '_id'}, {field: 'name'}]}
+                        columns={[{field: '_id', minWidth: 150, flex: 0.5}, {field: 'name', minWidth: 150, flex: 0.5}, {field: 'type_id', minWidth: 150, flex: 0.5}, {field: 'description', minWidth: 150, flex: 0.5}]}
                         getRowId={(row) => row._id}
                     ></DataGrid>
                     : <p>'No projects'</p>
@@ -39,6 +39,8 @@ class Projects extends React.Component {
             .then(data => {
                 console.log(data);
                 this.setState({projects: data});
+            }).catch(data => {
+                this.setState({projects: []});   
             });
 
     }
