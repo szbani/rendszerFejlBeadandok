@@ -2,9 +2,8 @@ import './App.css';
 import React from 'react';
 import {Container, Grid, Typography, TextField, Button, Select, MenuItem} from '@mui/material';
 // import ws from "./ws/ws";
-import {Routes, Route} from 'react-router-dom';
-import { withRouter } from 'react-router-dom';
-
+import {Routes, Route, BrowserRouter, Link, useNavigate, Navigate} from 'react-router-dom';
+// import {useHistory} from 'react-router-dom';
 // import Test from './Test.js';
 import Projects from './templates/Projects';
 import Tasks from './templates/Tasks';
@@ -16,7 +15,6 @@ class App extends React.Component {
             newTaskName: '',
             newTaskDescription: '',
             selectedDeveloper: '',
-            isLoaded: true
         }
         
     }
@@ -24,10 +22,7 @@ class App extends React.Component {
     componentDidMount() {
 
     }
-    
-    handleNavigateToTasks = () => {
-        this.props.history.push('tasks');
-    }
+
     render() {
         return (
             <div className="App">
@@ -38,17 +33,27 @@ class App extends React.Component {
                     <h1>Redmine</h1>
                 </header>
                 <body>
-                    
+
                 <Container>
-                    <Grid container spacing={2}>
-                       
-                            <Button onClick={this.handleNavigateToTasks} >
-                            Task
-                            </Button>
-                            <Routes>
-                                <Route path='/' element={Projects} />
-                                <Route path='/tasks' render={(props)=><Tasks {...props} projectID="65f3b74b77df5262b3453221"/>} />
-                            </Routes> 
+                    <Grid >
+                       <BrowserRouter basename={'/'}>
+                           <ul>
+                               <li>
+                                   <Link to={'/'}>Home</Link>
+                               </li>
+                               <li>
+                                   <Link to={'/project/65f3b74b77df5262b3453221/tasks'}>Tasks</Link>
+                               </li>
+                           </ul>
+                           <Routes>
+                               <Route path='/' element={<Projects />} />
+                               <Route path='/project/:projectID/tasks' loader={({params})=>{
+                                     console.log( params);
+                               }}
+                               element={<Tasks/>}/>
+                           </Routes>
+
+                        </BrowserRouter>
                         {/* <Grid item xs={12}>
                             <Typography variant="h4" gutterBottom sx={{mt: 2}}>
                                 Elérhető projektek
@@ -100,6 +105,7 @@ class App extends React.Component {
                        
                     </Grid>
                 </Container>
+                <div className="App-header"></div>
                 </body>
             </div>
         )
