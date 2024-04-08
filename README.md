@@ -16,3 +16,7 @@
 ### Server futtatása
   - Megnyitjuk a projeknek a mappáját cmd vagy a fejlesztői környezetünkben.
   - A konzolba beírjuk a(z) **npm run server** parancsot.
+
+### Kliens futtatása
+  - Megnyitjuk a projeknek a mappáját cmd vagy a fejlesztői környezetünkben.
+  - A konzolba beírjuk a(z) **npm start** parancsot.
