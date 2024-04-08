@@ -1,50 +1,51 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 // import ws from '../ws/ws';
 import {Button} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid'
+import {useParams} from "react-router-dom";
 
-class Tasks extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            tasks: []
-        }
-        this.getTasks = this.getTasks.bind(this);
-        // this.setProjects = this.setProjects.bind(this);
-    }
+function Tasks() {
+    const [tasks, setTasks] = React.useState([]);
+    const params = useParams();
 
-    render(){
-        return(
-            <div>
-                {
-                    this.state.tasks.length > 0 ?
-                    <DataGrid
-                        rows={this.state.tasks.map((task) => task)}
-                        columns={[{field: '_id', minWidth: 150, flex: 0.5}, {field: 'name', minWidth: 150, flex: 0.5}, {field: 'project_id', minWidth: 150, flex: 0.5}, {field: 'user_id', flex: 0.5}, {field: 'deadline', flex: 0.5}]}
-                        getRowId={(row) => row._id}
-                    ></DataGrid>
-                    : <p>'No tasks'</p>
-                }
-            </div>
-        )
+    useEffect(() => {
+        GetTasks();
+    },[]);
 
-    }
-
-    componentDidMount() {
-        this.getTasks();
-    }
-
-    getTasks() {
-        fetch('http://localhost:8080/api/tasks')
+    const GetTasks = () => {
+        let projectID = params.projectID;
+        fetch('http://localhost:8080/api/project/' + projectID + '/tasks')
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                this.setState({tasks: data});
+                setTasks(data);
             }).catch(data => {
-                this.setState({tasks: []});   
-            });
+            setTasks([]);
+        });
 
     }
+
+    return (
+        <div>
+            {
+                tasks.length > 0 ?
+                    <DataGrid
+                        rows={tasks.map((task) => task)}
+                        columns={[{field: '_id', minWidth: 150, flex: 0.5}, {
+                            field: 'name',
+                            minWidth: 150,
+                            flex: 0.5
+                        }, {field: 'project_id', minWidth: 150, flex: 0.5}, {
+                            field: 'user_id',
+                            flex: 0.5
+                        }, {field: 'deadline', flex: 0.5}]}
+                        getRowId={(row) => row._id}
+                    ></DataGrid>
+                    : <p>'No tasks'</p>
+            }
+        </div>
+    )
+
 }
 
 export default Tasks;

@@ -6,8 +6,6 @@ import Tasks from "./templates/Tasks";
 import Projects from "./templates/Projects";
 import App from "./App";
 import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} from "react-router-dom";
-import {createBrowserHistory} from "history";
-
 // const router = createBrowserRouter(
 //     createRoutesFromElements(
 //         <Route path='/' element={<App/>}>
@@ -16,13 +14,11 @@ import {createBrowserHistory} from "history";
 //     )
 // );
 
-const history = createBrowserHistory();
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         {/*<RouterProvider router={router}></RouterProvider>*/}
-        <App history={history}></App>
+        <App></App>
     </React.StrictMode>
 );
 

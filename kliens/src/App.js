@@ -2,11 +2,23 @@ import './App.css';
 import React from 'react';
 import {Container, Grid, Typography, TextField, Button, Select, MenuItem} from '@mui/material';
 // import ws from "./ws/ws";
-import {Routes, Route, BrowserRouter, Link, useNavigate, Navigate} from 'react-router-dom';
+import {Routes, Route, BrowserRouter, useNavigate} from 'react-router-dom';
 // import {useHistory} from 'react-router-dom';
 // import Test from './Test.js';
 import Projects from './templates/Projects';
 import Tasks from './templates/Tasks';
+
+const HandleNavigate = (props) =>{
+    const navigate = useNavigate();
+    // console.log(props);
+    const handleClick = () => {
+        navigate(props.path);
+    }
+    return(
+        <Button variant={"outlined"}  onClick={handleClick} sx={{mb: 3}}>{props.text}</Button>
+    )
+
+}
 
 class App extends React.Component {
     constructor(props) {
@@ -37,20 +49,16 @@ class App extends React.Component {
                 <Container>
                     <Grid >
                        <BrowserRouter basename={'/'}>
-                           <ul>
-                               <li>
-                                   <Link to={'/'}>Home</Link>
-                               </li>
-                               <li>
-                                   <Link to={'/project/65f3b74b77df5262b3453221/tasks'}>Tasks</Link>
-                               </li>
-                           </ul>
+                           <HandleNavigate path={'/'} text={'Projects'}></HandleNavigate>
+                           <HandleNavigate path={'/project/65f3b74b77df5262b3453221/tasks'} text={'Tasks'}></HandleNavigate>
                            <Routes>
                                <Route path='/' element={<Projects />} />
-                               <Route path='/project/:projectID/tasks' loader={({params})=>{
-                                     console.log( params);
-                               }}
-                               element={<Tasks/>}/>
+                               <Route path='/project/:projectID/tasks'
+                                      loader={({params}) => {
+                                          console.log(params);
+                                      }}
+                                      action={({params}) => {}}
+                               element={<Tasks />}/>
                            </Routes>
 
                         </BrowserRouter>
