@@ -54,11 +54,8 @@ class App extends React.Component {
                            <Routes>
                                <Route path='/' element={<Projects />} />
                                <Route path='/project/:projectID/tasks'
-                                      loader={({params}) => {
-                                          console.log(params);
-                                      }}
-                                      action={({params}) => {}}
                                element={<Tasks />}/>
+                               <Route path='/tasks' element={<Tasks />}/>
                            </Routes>
 
                         </BrowserRouter>

@@ -10,19 +10,30 @@ function Tasks() {
 
     useEffect(() => {
         GetTasks();
-    },[]);
+    }, []);
 
     const GetTasks = () => {
         let projectID = params.projectID;
-        fetch('http://localhost:8080/api/project/' + projectID + '/tasks')
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                setTasks(data);
-            }).catch(data => {
-            setTasks([]);
-        });
+        if (projectID != undefined) {
+            fetch('http://localhost:8080/api/project/' + projectID + '/tasks')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    setTasks(data);
+                }).catch(data => {
+                setTasks([]);
+            });
+        } else {
+            fetch('http://localhost:8080/api/tasks')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    setTasks(data);
+                }).catch(data => {
+                setTasks([]);
+            });
 
+        }
     }
 
     return (
