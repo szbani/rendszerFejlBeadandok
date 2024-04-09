@@ -50,7 +50,7 @@ class App extends React.Component {
                     <Grid >
                        <BrowserRouter basename={'/'}>
                            <HandleNavigate path={'/'} text={'Projects'}></HandleNavigate>
-                           <HandleNavigate path={'/project/65f3b74b77df5262b3453221/tasks'} text={'Tasks'}></HandleNavigate>
+                           <HandleNavigate path={'/tasks'} text={'Tasks'}></HandleNavigate>
                            <Routes>
                                <Route path='/' element={<Projects />} />
                                <Route path='/project/:projectID/tasks'
