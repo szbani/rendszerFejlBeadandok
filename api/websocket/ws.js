@@ -10,7 +10,7 @@ function createWebSocketServer(server) {
 
     ws.on('connection', function connection(ws) {
         console.log('Client connected');
-        let isAuth = false;
+        let isAuth = true;
         ws.send(JSON.stringify({message: 'Connected'}));
         ws.onmessage = function (message) {
             console.log('Received: ' + message.data);
