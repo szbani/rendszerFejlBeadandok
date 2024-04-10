@@ -1,4 +1,3 @@
-const http = require('http');
 
 const express = require('express');
 const getters = require('./express/exgetters');
@@ -12,7 +11,6 @@ const swaggerUI = require('swagger-ui-express');
 const swaggerSpec = require('./swagger/swagger');
 
 const cors = require('cors');
-const e = require("express");
 
 const corsOptions = {
     origin: '*',

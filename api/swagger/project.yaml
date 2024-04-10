@@ -79,40 +79,6 @@ paths:
                   message:
                     type: string
                     example: "Project deleted"
-  /api/project/{projectId}/tasks:
-    get:
-      tags:
-        - project
-        - task
-      summary: Get all tasks of a project
-      operationId: getTasksOfProject
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-          example: "65f60f8a89f811c81cef5238"
-      responses:
-        '200':
-          description: A list of tasks
-          content:
-            application/json:
-              schema:
-                $ref: './task.yaml#/components/schemas/Tasks'
-              example:
-                - _id: "65f3acb946a8a82e961b3fb9"
-                  name: "Task 1"
-                  description: "Description 1"
-                  project_id: "65f60f8a89f811c81cef5238"
-                  user_id: "65f3acb946a8a82e961b3fb9"
-                  deadline: "2021-12-31T23:59:59.999Z"
-                - _id: "65f3acb946a8a82e961b3fb9"
-                  name: "Task 2"
-                  description: "Description 2"
-                  project_id: "65f60f8a89f811c81cef5238"
-                  user_id: "65f3acb946a8a82e961b3fb9"
-                  deadline: "2021-12-31T23:59:59.999Z"
   /api/project/{projectId}/task/{taskId}:
     delete:
       tags:
@@ -144,31 +110,6 @@ paths:
                   message:
                     type: string
                     example: "Task removed"
-  /api/project/{projectId}/developers:
-    get:
-      tags:
-        - project
-        - developer
-      summary: Get all developers of a project
-      operationId: getDevelopersOfProject
-      parameters:
-        - in: path
-          name: id
-          required: true
-          schema:
-            type: string
-          example: "65f60f8a89f811c81cef5238"
-      responses:
-        '200':
-          description: A list of developers
-          content:
-            application/json:
-              schema:
-                $ref: './developer.yaml#/components/schemas/Developers'
-              example:
-                - _id: "65f3acb946a8a82e961b3fb9"
-                  name: "Developer 1"
-                  email: "dev1@gmail.com"
   /api/project/{ProjectId}/developer/{developerId}:
     delete:
       tags:
