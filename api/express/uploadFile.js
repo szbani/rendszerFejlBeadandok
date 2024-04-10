@@ -9,11 +9,12 @@ const projectTypeSchema = require("../../schemas/Project_Types");
 const projectDevSchema = require("../../schemas/Project_Developers");
 
 const mongoose = require("mongoose");
+let errors = [];
 
 router.post('/manager', async (req, res) => {
     try{
-        console.log(req.body);
-        let jsonMessage = JSON.parse(req.body);
+        // console.log(req.body);
+        let jsonMessage = req.body;
         console.log(jsonMessage);
         
         if (jsonMessage.name == undefined) {
@@ -24,8 +25,6 @@ router.post('/manager', async (req, res) => {
 
         if (jsonMessage.email == undefined) {
             errors.push('Email is required');
-        } else if (!authenticate.emailValidations(jsonMessage.email)) {
-            errors.push('Invalid email');
         } else if (await managerSchema.findOne({email: jsonMessage.email})) {
             errors.push('Email already exists');
         }
@@ -38,6 +37,7 @@ router.post('/manager', async (req, res) => {
 
         if (errors.length > 0) {
             res.status(500).json({error: errors});
+            errors = [];
             return;
         }
 
@@ -46,6 +46,7 @@ router.post('/manager', async (req, res) => {
         res.status(200).json({message: 'Manager added'});
     }catch(error){
         res.status(500).send();
+        console.log(error);
     }
 })
 

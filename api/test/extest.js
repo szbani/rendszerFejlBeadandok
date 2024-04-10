@@ -3,7 +3,8 @@ const header = new Headers();
 header.append('Content-Type', 'application/json');
 
 const managerData = {
-    email: 'hujeno@gmail.com',
+    name: 'Hugo',
+    email: 'hujenofdgha@gmail.com',
     password: 'password',
 }
 
@@ -15,10 +16,10 @@ fetch('http://localhost:8080/api/manager', {
     body: JSON.stringify(managerData),
 })
     .then(response => {
-        if (!response.ok) {
-            console.log(response);
-            throw new Error('Network response was not ok');
-        }
+        // if (!response.ok) {
+        //     console.log(response);
+        //     throw new Error('Network response was not ok');
+        // }
         // console.log(response.json());
         console.log(response);
         return response.json(); // Parse response as JSON
