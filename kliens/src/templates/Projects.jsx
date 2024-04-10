@@ -22,7 +22,7 @@ function Projects() {
 
     useEffect(() => {
         getProjects();
-    });
+    },[]);
 
     return (
         <div>

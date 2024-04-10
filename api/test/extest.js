@@ -1,25 +1,26 @@
 
 const header = new Headers();
 header.append('Content-Type', 'application/json');
-//
-// const managerData = {
-//     email: 'hujeno@gmail.com',
-//     password: 'password',
-// }
+
+const managerData = {
+    email: 'hujeno@gmail.com',
+    password: 'password',
+}
 
 // header.append('auth', JSON.stringify(managerData));
 
-fetch('http://localhost:8080/api/managers', {
-    method: 'GET',
-    headers: header,
+fetch('http://localhost:8080/api/manager', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(managerData),
 })
     .then(response => {
         if (!response.ok) {
-            // console.log(response);
+            console.log(response);
             throw new Error('Network response was not ok');
         }
         // console.log(response.json());
-        // console.log(response);
+        console.log(response);
         return response.json(); // Parse response as JSON
     })
     .then(data => {
