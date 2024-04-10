@@ -8,7 +8,7 @@ const projectDevSchema = require("../../schemas/Project_Developers");
 
 router.delete('/manager/:id', async (req, res) => {
     try {
-        const managerId = req.params.id;
+        const managerId = req.body.id;
         const deleteUser = await managerSchema.findByIdAndDelete(managerId);
         if (!deleteUser) {
             return res.status(404).json({message: `Manager with id: ${managerId} not found!`});
@@ -22,7 +22,7 @@ router.delete('/manager/:id', async (req, res) => {
 
 router.delete('/developer/:id', async (req, res) => {
     try {
-        const developerId = req.params.id;
+        const developerId = req.body.id;
         const deleteDev = await developerSchema.findByIdAndDelete(developerId);
         if (!deleteDev) {
             return res.status(404).json({message: `Developer with id: ${developerId} not found!`});
@@ -36,7 +36,7 @@ router.delete('/developer/:id', async (req, res) => {
 
 router.delete('/project/:id', async (req, res) => {
     try {
-        const projectId = req.params.id;
+        const projectId = req.body.id;
         const deleteProject = await projectSchema.findByIdAndDelete(projectId);
         if (!deleteProject) {
             return res.status(404).json({message: `Project with id: ${projectId} not found!`});
@@ -51,8 +51,8 @@ router.delete('/project/:id', async (req, res) => {
 
 router.delete('/project/:projectId/task/:taskId', async (req, res) => {
     try {
-        const projectId = req.params.projectId;
-        const taskId = req.params.taskId;
+        const projectId = req.body.projectId;
+        const taskId = req.body.taskId;
         const deleteTask = await taskSchema.findByIdAndDelete(taskId);
         if (!deleteTask) {
             return res.status(404).json({message: `Task with id: ${taskId} not found!`});
@@ -65,8 +65,8 @@ router.delete('/project/:projectId/task/:taskId', async (req, res) => {
 
 router.delete('/project/:projectId/developer/:developerId', async (req, res) => {
     try {
-        const projectId = req.params.projectId;
-        const developerId = req.params.developerId;
+        const projectId = req.body.projectId;
+        const developerId = req.body.developerId;
         const deleteDev = await projectDevSchema.findOneAndDelete({project_id: projectId, developer_id: developerId});
         if (!deleteDev) {
             return res.status(404).json({message: `Developer with developer id: ${developerId} not found on project with id: ${projectId} !`});
