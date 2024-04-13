@@ -3,6 +3,7 @@ const express = require('express');
 const getters = require('./express/exGetters');
 const deletes = require('./express/exDeletes');
 const uploads = require('./express/uploadFile');
+const updates = require('./express/exUpdates');
 
 // const createWebSocketServer = require('./websocket/ws');
 const {connectToDatabase} = require('./Mongo/MongoServer');
@@ -31,6 +32,7 @@ app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 app.use('/api', getters);
 app.use('/api', deletes);
 app.use('/api', uploads);
+app.use('/api', updates);
 
 process.on('SIGINT', () => {
     console.log('Closing server');
