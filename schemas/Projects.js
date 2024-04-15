@@ -7,6 +7,7 @@ const ProjectSchema = new mongoose.Schema({
     },
     type_id:{
         type: mongoose.Schema.Types.ObjectId,
+        required: true,
         ref: 'Project_Types',
     },
     description: {

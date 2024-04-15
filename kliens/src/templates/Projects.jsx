@@ -22,15 +22,21 @@ function Projects() {
 
     useEffect(() => {
         getProjects();
-    });
+    }, []);
 
     return (
         <div>
             <Button variant={"outlined"} onClick={getProjects} sx={{mb: 3}}>Refresh projects</Button>
             {projects.length > 0 ?
                 <DataGrid
-                    rows={projects.map((project) => project)}
-                    columns={[{field: '_id', minWidth: 150, flex: 0.5}, {field: 'name', minWidth: 150, flex: 0.5}, {field: 'type_id', minWidth: 150, flex: 0.5}, {field: 'description', minWidth: 150, flex: 0.5}]}
+                    rows={projects}
+                    columns={[
+                        {field: '_id', minWidth: 150, flex: 0.5},
+                        {field: 'name', minWidth: 150, flex: 0.5},
+                        {field: 'type', minWidth: 150, flex: 0.5},
+                        {field: 'description', minWidth: 150, flex: 0.5},
+                        {field: 'sumTasks', minWidth: 150, flex: 0.5}
+                    ]}
                     getRowId={(row) => row._id}
                     onRowClick={(row) => {
                         // console.log(row);
