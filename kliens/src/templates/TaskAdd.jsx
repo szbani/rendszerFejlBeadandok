@@ -3,9 +3,7 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DialogContentText,
-    DialogTitle, FormControl, Grid, InputLabel, MenuItem,
-    Select,
+    DialogTitle, FormControl, Grid,  MenuItem,
     TextField
 } from "@mui/material";
 import {useEffect, useState} from "react";
