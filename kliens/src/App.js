@@ -7,6 +7,7 @@ import {Routes, Route, BrowserRouter, useNavigate} from 'react-router-dom';
 // import Test from './Test.js';
 import Projects from './templates/Projects';
 import Tasks from './templates/Tasks';
+import TaskAddButton from "./templates/TaskAdd";
 
 const HandleNavigate = (props) =>{
     const navigate = useNavigate();
@@ -50,12 +51,10 @@ class App extends React.Component {
                     <Grid >
                        <BrowserRouter basename={'/'}>
                            <HandleNavigate path={'/'} text={'Projects'}></HandleNavigate>
-                           <HandleNavigate path={'/tasks'} text={'Tasks'}></HandleNavigate>
                            <Routes>
                                <Route path='/' element={<Projects />} />
                                <Route path='/project/:projectID/tasks'
-                               element={<Tasks />}/>
-                               <Route path='/tasks' element={<Tasks />}/>
+                                      element={ <div><TaskAddButton /><Tasks /></div>}/>
                            </Routes>
 
                         </BrowserRouter>
