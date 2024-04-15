@@ -31,7 +31,7 @@ function Projects() {
                 <DataGrid
                     rows={projects}
                     columns={[
-                        {field: '_id', minWidth: 150, flex: 0.5},
+                        // {field: '_id', minWidth: 150, flex: 0.5},
                         {field: 'name', minWidth: 150, flex: 0.5},
                         {field: 'type', minWidth: 150, flex: 0.5},
                         {field: 'description', minWidth: 150, flex: 0.5},

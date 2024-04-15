@@ -13,7 +13,7 @@ function Tasks() {
     }, []);
 
     const GetTasks = () => {
-        let projectID = params.projectID;
+        const projectID = params.projectID;
         if (projectID != undefined) {
             fetch('http://localhost:8080/api/project/' + projectID + '/tasks')
                 .then(response => response.json())
@@ -42,14 +42,17 @@ function Tasks() {
                 tasks.length > 0 ?
                     <DataGrid
                         rows={tasks.map((task) => task)}
-                        columns={[{field: '_id', minWidth: 150, flex: 0.5}, {
-                            field: 'name',
-                            minWidth: 150,
-                            flex: 0.5
-                        }, {field: 'project_id', minWidth: 150, flex: 0.5}, {
-                            field: 'user_id',
-                            flex: 0.5
-                        }, {field: 'deadline', flex: 0.5}]}
+                        columns={[
+                            // {field: '_id', minWidth: 150, flex: 0.5},
+                            {
+                                field: 'name',
+                                minWidth: 150,
+                                flex: 0.5
+                            },
+                            {field: 'project_id', minWidth: 150, flex: 0.5},
+                            {field: 'user_id', flex: 0.5},
+                            {field: 'deadline', flex: 0.5}
+                        ]}
                         getRowId={(row) => row._id}
                     ></DataGrid>
                     : <p>'No tasks'</p>

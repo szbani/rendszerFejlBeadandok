@@ -4,13 +4,14 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
-    DialogTitle, FormControl, MenuItem,
+    DialogTitle, FormControl, Grid, InputLabel, MenuItem,
     Select,
     TextField
 } from "@mui/material";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {useParams} from "react-router-dom";
 
 export default function TaskAddButton() {
     const [open, setOpen] = useState(false);
@@ -34,17 +35,49 @@ function TaskAddDialog({open, onClose}) {
 
     const [taskName, setTaskName] = useState("");
     const [taskDesc, setTaskDescription] = useState("");
-    const [taskManager, setManager] = useState("");
+    const [taskManager, setTaskManager] = useState("");
     const [deadline, setDeadline] = useState(null);
+    const [managers, setManagers] = useState([]);
+
+    const params = useParams();
+
+    const getManagers = () => {
+        fetch('http://localhost:8080/api/managers')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setManagers(data);
+            }).catch(data => {
+            setManagers([]);
+        });
+    }
+
+    useEffect(() => {
+        getManagers();
+    },[]);
 
     const handleSubmit = () => {
+        const projectID = params.projectID;
         console.log("submit");
         const formData = {
             name: taskName,
             description: taskDesc,
-            manager: taskManager,
+            user_id: taskManager,
             deadline: deadline
         }
+        fetch('http://localhost:8080/api/project/' + projectID + '/task', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        }).then(response => response.json())
+            .then(data => {
+                console.log(data);
+            }).catch(data => {
+            console.log(data);
+
+        })
         console.log(formData);
     }
 
@@ -57,44 +90,44 @@ function TaskAddDialog({open, onClose}) {
     };
 
     const handleManagerChange = (event) => {
-        setManager(event.target.value);
+        setTaskManager(event.target.value);
     };
 
     const handleDeadlineChange = (date) => {
         setDeadline(date);
     };
     return (
-        <Dialog fullWidth maxWidth={"md"} open={open} onClose={onClose}>
+        <Dialog fullWidth maxWidth={"sm"} open={open} onClose={onClose}>
             <FormControl>
                 <DialogTitle>Feladat hozzáadása</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        Test szoveg!
-                    </DialogContentText>
-                    <TextField label={"Feladat neve"} value={taskName} onChange={handleTaskNameChange} fullWidth/>
-                    <DialogContentText>
-                        Test szoveg!
-                    </DialogContentText>
-                    <TextField label={"Feladat leírása"} value={taskDesc} onChange={handleTaskDescriptionChange} fullWidth/>
-                    <DialogContentText>
-                        Test szoveg!
-                    </DialogContentText>
-                    <Select
+                    <TextField sx={{marginTop:"12px"}} label={"Feladat neve"} value={taskName} onChange={handleTaskNameChange} fullWidth/>
+                    <TextField sx={{marginY:"12px"}} label={"Feladat leírása"} value={taskDesc} onChange={handleTaskDescriptionChange}
+                               fullWidth/>
+                    <Grid   container spacing={2}>
+                        <Grid item xs={7}>
+                            <TextField
+                                label={"Manager"}
+                                value={taskManager}
+                                onChange={handleManagerChange}
+                                select
+                                fullWidth
+                            >
+                                <MenuItem value="" disabled>
+                                    Válassz Managert
+                                </MenuItem>
+                                {managers.map((manager) => {
+                                    return <MenuItem key={manager._id} value={manager._id}>{manager.name}</MenuItem>
+                                })}
 
-                        label="Manager"
-                        value={taskManager}
-                        onChange={handleManagerChange}
-                        fullWidth
-                    >
-                        <MenuItem value={'man1'}>man1</MenuItem>
-                        <MenuItem value={'man2'}>man2</MenuItem>
-                    </Select>
-                    <DialogContentText>
-                        Test szoveg!
-                    </DialogContentText>
-                    <LocalizationProvider dateAdapter={AdapterDayjs} >
-                        <DatePicker label={"Határidő"} value={deadline} onChange={handleDeadlineChange}/>
-                    </LocalizationProvider>
+                            </TextField>
+                        </Grid>
+                        <Grid item xs={5}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker label={"Határidő"} value={deadline} onChange={handleDeadlineChange}/>
+                            </LocalizationProvider>
+                        </Grid>
+                    </Grid>
                     {/*65fb2362534102d005ce0dcf*/}
                 </DialogContent>
                 <DialogActions>
@@ -103,6 +136,6 @@ function TaskAddDialog({open, onClose}) {
                 </DialogActions>
             </FormControl>
         </Dialog>
-    )
+)
 
 }

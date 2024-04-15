@@ -123,11 +123,20 @@ router.post('/project', async (req, res) => {
     }
 })
 
-router.post('/tasks', async (req, res) => {
+router.post('/project/:id/task', async (req, res) => {
     try{
         // console.log(req.body);
+
         let jsonMessage = req.body;
+        jsonMessage.project_id = req.params.id;
         console.log(jsonMessage);
+        if (jsonMessage.project_id == undefined) {
+            errors.push('ID is required');
+        }else if (!mongoose.Types.ObjectId.isValid(jsonMessage.project_id)) {
+            errors.push('ID is not valid');
+        }else if (!await projectSchema.findById(jsonMessage.project_id)) {
+            errors.push('Project does not exist');
+        }
 
         if (jsonMessage.name == undefined) {
             errors.push('Name is required');
@@ -139,12 +148,12 @@ router.post('/tasks', async (req, res) => {
             errors.push('Description is required');
         }
 
-        if (jsonMessage.project_id == undefined) {
-            errors.push('Project ID is required');
-        }
-
         if (jsonMessage.user_id == undefined) {
             errors.push('User ID is required');
+        }else if (!mongoose.Types.ObjectId.isValid(jsonMessage.user_id)) {
+            errors.push('User ID is not valid');
+        }else if (!await managerSchema.findById(jsonMessage.user_id)){
+            errors.push('User does not exist');
         }
 
         if (jsonMessage.deadline == undefined) {
@@ -161,7 +170,7 @@ router.post('/tasks', async (req, res) => {
             return;
         }
 
-        const task = new managerSchema(jsonMessage);
+        const task = new taskSchema(jsonMessage);
         await task.save();
         res.status(200).json({message: 'Task added'});
 
