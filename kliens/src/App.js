@@ -8,6 +8,7 @@ import {Routes, Route, BrowserRouter, useNavigate} from 'react-router-dom';
 import Projects from './templates/Projects';
 import Tasks from './templates/Tasks';
 import TaskAddButton from "./templates/TaskAdd";
+import AddProjectButton from "./templates/AddProject";
 
 const HandleNavigate = (props) =>{
     const navigate = useNavigate();
@@ -52,9 +53,11 @@ class App extends React.Component {
                        <BrowserRouter basename={'/'}>
                            <HandleNavigate path={'/'} text={'Projects'}></HandleNavigate>
                            <Routes>
-                               <Route path='/' element={<Projects />} />
+
                                <Route path='/project/:projectID/tasks'
                                       element={ <div><TaskAddButton /><Tasks /></div>}/>
+                               <Route path='/'
+                                      element={ <div><AddProjectButton /><Projects /></div>}/>
                            </Routes>
 
                         </BrowserRouter>
