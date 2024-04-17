@@ -26,7 +26,6 @@ async function getTasksByProjectId(projectId) {
             user: task.user_id.name
         }
     });
-    console.log(tasks);
 
     return tasks;
 }

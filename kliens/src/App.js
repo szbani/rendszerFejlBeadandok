@@ -3,6 +3,7 @@ import React from 'react';
 import {Container, AppBar, Toolbar, Typography, ThemeProvider, createTheme} from '@mui/material';
 import {huHU as hu} from '@mui/material/locale';
 import {huHU as hu2} from '@mui/x-data-grid/locales';
+import {huHU as hu3} from '@mui/x-date-pickers/locales';
 // import ws from "./ws/ws";
 import {Routes, Route, BrowserRouter} from 'react-router-dom';
 
@@ -32,6 +33,7 @@ const theme = createTheme(
     },
     hu,
     hu2,
+    hu3,
 );
 
 class App extends React.Component {

@@ -5,12 +5,13 @@ import {DataGrid} from '@mui/x-data-grid'
 import {useParams} from "react-router-dom";
 import {ArrowBack} from "@mui/icons-material";
 import TaskAddButton from "./TaskAdd";
-
+import {useNavigate} from "react-router-dom";
 
 function Tasks() {
     const [tasks, setTasks] = React.useState([]);
     const params = useParams();
-    const [projectName,setProjectName] = React.useState('');
+    const [projectName, setProjectName] = React.useState('');
+    const navigate = useNavigate();
 
     const TaskRefreshButton = () => {
         return (
@@ -22,17 +23,22 @@ function Tasks() {
 
     const BackToProjectsButton = () => {
         return (
-            <IconButton aria-label={'back to projects'} sx={{mb: 3}}><ArrowBack/></IconButton>
+            <IconButton aria-label={'Vissza a projektekhez'}
+                        onClick={() => {
+                            try {
+                                navigate('/');
+                            } catch (error) {
+                                console.error(error);
+                            }
+                        }}
+                        sx={{mb: 3}}>
+                <ArrowBack/>
+            </IconButton>
         )
-    }
-
-    const DeleteTaskButton = () => {
-        return (
-            <Button variant={"outlined"}>Feladat Törlése</Button>
-        )
-    }
+    };
 
     const DeleteTask = (taskID) => {
+        console.log(taskID);
         fetch('http://localhost:8080/api/project/' + params.projectID + '/task/' + taskID, {
             method: 'DELETE'
         }).then(response => response.json())
@@ -114,10 +120,11 @@ function Tasks() {
                             {
                                 field: 'delete',
                                 headerName: 'Törlés',
+                                sortable: false,
                                 flex: 0.4,
                                 renderCell: (params) => {
-                                    return <DeleteTaskButton
-                                        onClick={() => DeleteTask(params.row._id)}></DeleteTaskButton>
+                                    return <Button variant={"outlined"}
+                                                   onClick={() => DeleteTask(params.row._id)}>Törlés</Button>
                                 }
                             }
                         ]}
