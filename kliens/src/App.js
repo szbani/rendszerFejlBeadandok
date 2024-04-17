@@ -9,8 +9,6 @@ import {Routes, Route, BrowserRouter} from 'react-router-dom';
 
 import Projects from './templates/Projects';
 import Tasks from './templates/Tasks';
-import AddProjectButton from "./templates/AddProject";
-
 // const HandleNavigate = (props) => {
 //     const navigate = useNavigate();
 //     // console.log(props);
@@ -64,7 +62,7 @@ class App extends React.Component {
                                 <Route path='/project/:projectID/tasks'
                                        element={<Tasks/>}/>
                                 <Route path='/'
-                                       element={<div><AddProjectButton/><Projects/></div>}/>
+                                       element={<Projects/>}/>
                             </Routes>
                         </BrowserRouter>
 

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import {useEffect, useState} from "react";
 
-export default function AddProjectButton() {
+export default function AddProjectButton(getProjects) {
     const [open, setOpen] = useState(false);
     const handleclose = () => {
         setOpen(false);
@@ -22,13 +22,13 @@ export default function AddProjectButton() {
     return (
         <div>
             <Button variant={"outlined"} onClick={handleOpen}>Projekt hozzáadása</Button>
-            <AddProjectDialog open={open} onClose={handleclose}/>
+            <AddProjectDialog open={open} onClose={handleclose} getProjects={getProjects}/>
         </div>
     )
 
 }
 
-function AddProjectDialog({open, onClose}) {
+function AddProjectDialog({open, onClose, getProjects}) {
 
     const [projectName, setProjectName] = useState("");
     const [projectType, setProjectType] = useState("");
@@ -67,6 +67,8 @@ function AddProjectDialog({open, onClose}) {
         }).then(response => response.json())
             .then(data => {
                 console.log(data);
+                onClose();
+                getProjects();
             }).catch(data => {
             console.log(data);
 
