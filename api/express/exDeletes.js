@@ -8,7 +8,7 @@ const projectDevSchema = require("../../schemas/Project_Developers");
 
 router.delete('/manager/:id', async (req, res) => {
     try {
-        const managerId = req.body.id;
+        const managerId = req.params.id;
         const deleteUser = await managerSchema.findByIdAndDelete(managerId);
         if (!deleteUser) {
             return res.status(404).json({message: `Manager with id: ${managerId} not found!`});
@@ -22,7 +22,7 @@ router.delete('/manager/:id', async (req, res) => {
 
 router.delete('/developer/:id', async (req, res) => {
     try {
-        const developerId = req.body.id;
+        const developerId = req.params.id;
         const deleteDev = await developerSchema.findByIdAndDelete(developerId);
         if (!deleteDev) {
             return res.status(404).json({message: `Developer with id: ${developerId} not found!`});
@@ -36,7 +36,7 @@ router.delete('/developer/:id', async (req, res) => {
 
 router.delete('/project/:id', async (req, res) => {
     try {
-        const projectId = req.body.id;
+        const projectId = req.params.id;
         const deleteProject = await projectSchema.findByIdAndDelete(projectId);
         if (!deleteProject) {
             return res.status(404).json({message: `Project with id: ${projectId} not found!`});
@@ -49,15 +49,14 @@ router.delete('/project/:id', async (req, res) => {
     }
 });
 
-router.delete('/project/:projectId/task/:taskId', async (req, res) => {
+router.delete('/project/:projectID/task/:taskId', async (req, res) => {
     try {
-        const projectId = req.body.projectId;
-        const taskId = req.body.taskId;
-        const deleteTask = await taskSchema.findByIdAndDelete(taskId);
+        const tid = req.params.taskId;
+        const deleteTask = await taskSchema.findByIdAndDelete(tid);
         if (!deleteTask) {
-            return res.status(404).json({message: `Task with id: ${taskId} not found!`});
+            return res.status(404).json({message: `Task with id: ${tid} not found!`});
         }
-        res.status(200).json({message: `Task with task id: ${taskId} has been deleted!`});
+        res.status(200).json({message: `Task with task id: ${tid} has been deleted!`});
     } catch (error) {
         res.status(500).send();
     }
@@ -65,7 +64,7 @@ router.delete('/project/:projectId/task/:taskId', async (req, res) => {
 
 router.delete('/project/:projectId/developer/:developerId', async (req, res) => {
     try {
-        const projectId = req.body.projectId;
+        const projectId = req.params.projectId;
         const developerId = req.body.developerId;
         const deleteDev = await projectDevSchema.findOneAndDelete({project_id: projectId, developer_id: developerId});
         if (!deleteDev) {

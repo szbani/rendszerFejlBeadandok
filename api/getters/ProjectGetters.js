@@ -1,10 +1,23 @@
 const projectSchema = require("../../schemas/Projects");
+const taskSchema = require("../../schemas/Tasks");
 const projectTypeSchema = require("../../schemas/Project_Types");
 const projectDeveloperSchema = require("../../schemas/Project_Developers");
 
 async function getProjects() {
     try {
-        const projects = await projectSchema.find({});
+        let projects = await projectSchema.find({})
+            .populate('type_id', 'name -_id')
+            .exec();
+        projects = await Promise.all(projects.map(async project => {
+            const sumTasks = await taskSchema.countDocuments({project_id: project._id})
+            return {
+                _id: project._id,
+                name: project.name,
+                type: project.type_id.name,
+                description: project.description,
+                sumTasks
+            }
+        }));
         return projects;
     } catch (error) {
         console.log("Error getting projects: ", error);
@@ -27,7 +40,7 @@ async function getProjectByProjectId(projectId) {
 }
 
 async function getProjectsByProjectTypeId(projectTypeId) {
-    return projectSchema.find({type_id : projectTypeId});
+    return projectSchema.find({type_id: projectTypeId});
 }
 
 module.exports = {
