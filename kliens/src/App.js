@@ -67,7 +67,7 @@ class App extends React.Component {
                                        element={<div><AddProjectButton/><Projects/></div>}/>
                             </Routes>
                         </BrowserRouter>
-                        <Typography>Kattints egy sorra a kapcsolódó feladatokért</Typography>
+
                     </Container>
                 </ThemeProvider>
             </div>

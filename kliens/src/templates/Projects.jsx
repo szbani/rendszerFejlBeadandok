@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 // import ws from '../ws/ws';
-import {Button} from '@mui/material';
+import {Button, Typography} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid'
 import {useNavigate} from "react-router-dom";
 
@@ -27,6 +27,7 @@ function Projects() {
     return (
         <div>
             <Button variant={"outlined"} onClick={getProjects} sx={{mb: 3}}>Refresh projects</Button>
+            <Typography>Kattints egy sorra a kapcsolódó feladatokért</Typography>
             {projects.length > 0 ?
                 <DataGrid
                     rows={projects}
