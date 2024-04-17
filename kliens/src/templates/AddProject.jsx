@@ -6,7 +6,7 @@ import {
     DialogContentText,
     DialogTitle, FormControl, Grid, MenuItem,
     Select,
-    TextField
+    TextField, Typography
 } from "@mui/material";
 import {useEffect, useState} from "react";
 
@@ -121,7 +121,6 @@ function AddProjectDialog({open, onClose}) {
                     <Button onClick={handleSubmit}>Hozzáadás</Button>
                 </DialogActions>
             </FormControl>
-
         </Dialog>
     )
 }

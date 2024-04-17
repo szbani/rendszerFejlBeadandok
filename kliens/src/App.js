@@ -53,7 +53,7 @@ class App extends React.Component {
                 <ThemeProvider theme={theme}>
                     <AppBar sx={{mb: 5}} position={"sticky"}>
                         <Toolbar>
-                            <Typography variant={"h6"} component={"div"}>Readmine</Typography>
+                            <Typography variant={"h6"} component={"div"}>Redmine</Typography>
                         </Toolbar>
                     </AppBar>
 
@@ -67,6 +67,7 @@ class App extends React.Component {
                                        element={<div><AddProjectButton/><Projects/></div>}/>
                             </Routes>
                         </BrowserRouter>
+                        <Typography>Kattints egy sorra a kapcsolódó feladatokért</Typography>
                     </Container>
                 </ThemeProvider>
             </div>
