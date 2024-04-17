@@ -3,7 +3,7 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DialogTitle, FormControl, Grid,  MenuItem,
+    DialogTitle, FormControl, Grid, MenuItem,
     TextField
 } from "@mui/material";
 import {useEffect, useState} from "react";
@@ -11,7 +11,7 @@ import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {useParams} from "react-router-dom";
 
-export default function TaskAddButton() {
+export default function TaskAddButton({GetTasks}) {
     const [open, setOpen] = useState(false);
     const handleclose = () => {
         setOpen(false);
@@ -22,14 +22,14 @@ export default function TaskAddButton() {
 
     return (
         <div>
-            <Button variant={"outlined"} onClick={handleOpen}>Feladat hozzáadása</Button>
-            <TaskAddDialog open={open} onClose={handleclose}/>
+            <Button variant={"outlined"} onClick={handleOpen} sx={{mb: 3}}>Feladat hozzáadása</Button>
+            <TaskAddDialog open={open} onClose={handleclose} GetTasks={GetTasks}/>
         </div>
     )
 
 }
 
-function TaskAddDialog({open, onClose}) {
+function TaskAddDialog({open, onClose,GetTasks}) {
 
     const [taskName, setTaskName] = useState("");
     const [taskDesc, setTaskDescription] = useState("");
@@ -52,7 +52,7 @@ function TaskAddDialog({open, onClose}) {
 
     useEffect(() => {
         getManagers();
-    },[]);
+    }, []);
 
     const handleSubmit = () => {
         const projectID = params.projectID;
@@ -74,7 +74,8 @@ function TaskAddDialog({open, onClose}) {
                 console.log(data);
             }).catch(data => {
             console.log(data);
-
+            onClose();
+            GetTasks();
         })
         console.log(formData);
     }
@@ -99,10 +100,12 @@ function TaskAddDialog({open, onClose}) {
             <FormControl>
                 <DialogTitle>Feladat hozzáadása</DialogTitle>
                 <DialogContent>
-                    <TextField sx={{marginTop:"12px"}} label={"Feladat neve"} value={taskName} onChange={handleTaskNameChange} fullWidth/>
-                    <TextField sx={{marginY:"12px"}} label={"Feladat leírása"} value={taskDesc} onChange={handleTaskDescriptionChange}
+                    <TextField sx={{marginTop: "12px"}} label={"Feladat neve"} value={taskName}
+                               onChange={handleTaskNameChange} fullWidth/>
+                    <TextField sx={{marginY: "12px"}} label={"Feladat leírása"} value={taskDesc}
+                               onChange={handleTaskDescriptionChange}
                                fullWidth/>
-                    <Grid   container spacing={2}>
+                    <Grid container spacing={2}>
                         <Grid item xs={7}>
                             <TextField
                                 label={"Manager"}
@@ -134,6 +137,6 @@ function TaskAddDialog({open, onClose}) {
                 </DialogActions>
             </FormControl>
         </Dialog>
-)
+    )
 
 }

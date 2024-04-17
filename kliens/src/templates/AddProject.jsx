@@ -58,7 +58,7 @@ function AddProjectDialog({open, onClose}) {
 
     return (
         <div>
-            <FormControl marginNormal>
+            <FormControl>
                 <DialogTitle>Projekt hozzáadása</DialogTitle>
                 <DialogContent>
                 <TextField id="project-name" label="Name" variant="outlined" value={projectName} onChange={handleProjectNameChange}/>
@@ -72,7 +72,7 @@ function AddProjectDialog({open, onClose}) {
                     <MenuItem value={20}>Two</MenuItem>
                     <MenuItem value={30}>Three</MenuItem>
                 </Select>
-                <TextField id="project-desc" label="Description" variant="outlined" value={projectDesc} onHandle={handleProjectDescriptionChange}/>
+                <TextField id="project-desc" label="Description" variant="outlined" value={projectDesc} onChange={handleProjectDescriptionChange}/>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={onClose}>Mégse</Button>

@@ -1,26 +1,38 @@
 import './App.css';
 import React from 'react';
-import {Container, Grid, Typography, TextField, Button, Select, MenuItem} from '@mui/material';
+import {Container, AppBar, Toolbar, Typography, ThemeProvider, createTheme} from '@mui/material';
+import {huHU as hu} from '@mui/material/locale';
+import {huHU as hu2} from '@mui/x-data-grid/locales';
 // import ws from "./ws/ws";
-import {Routes, Route, BrowserRouter, useNavigate} from 'react-router-dom';
-// import {useHistory} from 'react-router-dom';
-// import Test from './Test.js';
+import {Routes, Route, BrowserRouter} from 'react-router-dom';
+
 import Projects from './templates/Projects';
 import Tasks from './templates/Tasks';
-import TaskAddButton from "./templates/TaskAdd";
 import AddProjectButton from "./templates/AddProject";
 
-const HandleNavigate = (props) =>{
-    const navigate = useNavigate();
-    // console.log(props);
-    const handleClick = () => {
-        navigate(props.path);
-    }
-    return(
-        <Button variant={"outlined"}  onClick={handleClick} sx={{mb: 3}}>{props.text}</Button>
-    )
+// const HandleNavigate = (props) => {
+//     const navigate = useNavigate();
+//     // console.log(props);
+//     const handleClick = () => {
+//         navigate(props.path);
+//     }
+//     return (
+//         <Button variant={"outlined"} onClick={handleClick} sx={{mb: 3}}>{props.text}</Button>
+//     )
+//
+// }
 
-}
+const theme = createTheme(
+    {
+        palette: {
+            primary: {
+                main: '#271c1c',
+            },
+        },
+    },
+    hu,
+    hu2,
+);
 
 class App extends React.Component {
     constructor(props) {
@@ -30,93 +42,33 @@ class App extends React.Component {
             newTaskDescription: '',
             selectedDeveloper: '',
         }
-        
-    }
-
-    componentDidMount() {
 
     }
 
     render() {
         return (
             <div className="App">
-                <head>
-                    <meta name="viewport" content="initial-scale=1, width=device-width"/>
-                </head>
-                <header className="App-header">
-                    <h1>Redmine</h1>
-                </header>
-                <body>
+                <ThemeProvider theme={theme}>
+                    <AppBar sx={{mb: 5}} position={"sticky"}>
+                        <Toolbar>
+                            <Typography variant={"h6"} component={"div"}>Readmine</Typography>
+                        </Toolbar>
+                    </AppBar>
 
-                <Container>
-                    <Grid >
-                       <BrowserRouter basename={'/'}>
-                           <HandleNavigate path={'/'} text={'Projects'}></HandleNavigate>
-                           <Routes>
-
-                               <Route path='/project/:projectID/tasks'
-                                      element={ <div><TaskAddButton /><Tasks /></div>}/>
-                               <Route path='/'
-                                      element={ <div><AddProjectButton /><Projects /></div>}/>
-                           </Routes>
-
+                    <Container>
+                        <BrowserRouter basename={'/'}>
+                            {/*<HandleNavigate path={'/'} text={'Projects'}></HandleNavigate>*/}
+                            <Routes>
+                                <Route path='/project/:projectID/tasks'
+                                       element={<Tasks/>}/>
+                                <Route path='/'
+                                       element={<div><AddProjectButton/><Projects/></div>}/>
+                            </Routes>
                         </BrowserRouter>
-                        {/* <Grid item xs={12}>
-                            <Typography variant="h4" gutterBottom sx={{mt: 2}}>
-                                Elérhető projektek
-                            </Typography>
-                            
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Tasks></Tasks>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Typography variant="h4" gutterBottom>
-                                Új feladat felvétele
-                            </Typography>
-                            <TextField
-                                sx={{mb: 2}}
-                                label="Feladat neve"
-                                variant="outlined"
-                                fullWidth
-                                //value={newTaskName}
-                                //onChange={(e) => setNewTaskName(e.target.value)}
-                            />
-                            <TextField
-                                sx={{mb: 2}}
-                                label="Feladat leírása"
-                                variant="outlined"
-                                fullWidth
-                                multiline
-                                rows={4}
-                                //value={newTaskDescription}
-                                //onChange={(e) => setNewTaskDescription(e.target.value)}
-                            />
-                            <Select
-                                sx={{mb: 2}}
-                                //value={selectedDeveloper}
-                                //onChange={(e) => setSelectedDeveloper(e.target.value)}
-                                fullWidth
-                                displayEmpty
-                                defaultValue=""
-                            >
-                                <MenuItem value="" disabled>
-                                    Válassz fejlesztőt
-                                </MenuItem>
-
-                            </Select>
-                            <Button variant="contained" color="primary">
-                                Feladat hozzáadása
-                            </Button>
-                        </Grid> */}
-                       
-                    </Grid>
-                </Container>
-                <div className="App-header"></div>
-                </body>
+                    </Container>
+                </ThemeProvider>
             </div>
-        )
-            ;
+        );
     }
 }
 

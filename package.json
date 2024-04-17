@@ -6,9 +6,10 @@
   "main": "api/index.js",
   "scripts": {
     "server": "node api/index.js",
+    "client": "cd kliens && serve -s build",
     "servertest": "node api/test/extest.js",
     "start": "cd kliens && react-scripts start",
-    "build": "react-scripts build",
+    "build": "cd kliens && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "nodemon": "nodemon api/index.js"
@@ -21,6 +22,7 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fontsource/roboto": "^5.0.12",
+    "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.14",
     "@mui/x-data-grid": "^7.1.0",
     "@mui/x-date-pickers": "^7.2.0",

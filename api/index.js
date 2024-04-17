@@ -28,7 +28,7 @@ app.use((req,res,next) => {
     console.log(`Request: ${req.method} ${req.url}`);
     next();
 });
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+// app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 app.use('/api', getters);
 app.use('/api', deletes);
 app.use('/api', uploads);

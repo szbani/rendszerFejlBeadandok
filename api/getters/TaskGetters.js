@@ -11,7 +11,24 @@ async function getTasks() {
 }
 
 async function getTasksByProjectId(projectId) {
-    return taskSchema.find({project_id: projectId});
+    let tasks =
+        await taskSchema.find({project_id: projectId})
+            .populate('user_id', 'name as user -_id')
+            .populate('project_id', 'name -_id')
+            .exec();
+    tasks = await tasks.map(task => {
+        return {
+            _id: task._id,
+            name: task.name,
+            description: task.description,
+            deadline: task.deadline,
+            project: task.project_id.name,
+            user: task.user_id.name
+        }
+    });
+    console.log(tasks);
+
+    return tasks;
 }
 
 async function getTaskByTaskId(taskId) {
