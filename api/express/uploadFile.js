@@ -67,7 +67,7 @@ router.post('/developer', async (req, res) => {
 
         if (jsonMessage.email == undefined) {
             errors.push('Email is required');
-        } else if (await managerSchema.findOne({email: jsonMessage.email})) {
+        } else if (await developerSchema.findOne({email: jsonMessage.email})) {
             errors.push('Email already exists');
         }
 
@@ -77,7 +77,7 @@ router.post('/developer', async (req, res) => {
             return;
         }
 
-        const developer = new managerSchema(jsonMessage);
+        const developer = new developerSchema(jsonMessage);
         await developer.save();
         res.status(200).json({message: 'Developer added'});
 
@@ -101,10 +101,10 @@ router.post('/project', async (req, res) => {
 
         if (jsonMessage.type_id == undefined) {
             errors.push('Type ID is required');
-        }
-
-        if (jsonMessage.description == undefined) {
-            errors.push('Description is required');
+        }else if (!mongoose.Types.ObjectId.isValid(jsonMessage.type_id)) {
+            errors.push('Type ID is not valid');
+        }else if (!await projectTypeSchema.findById(jsonMessage.type_id)) {
+            errors.push('Type ID does not exist');
         }
 
         if (errors.length > 0) {
@@ -113,7 +113,7 @@ router.post('/project', async (req, res) => {
             return;
         }
 
-        const project = new managerSchema(jsonMessage);
+        const project = new projectSchema(jsonMessage);
         await project.save();
         res.status(200).json({message: 'Project added'});
 
