@@ -54,7 +54,6 @@ class App extends React.Component {
                             <Typography variant={"h6"} component={"div"}>Redmine</Typography>
                         </Toolbar>
                     </AppBar>
-
                     <Container>
                         <BrowserRouter basename={'/'}>
                             {/*<HandleNavigate path={'/'} text={'Projects'}></HandleNavigate>*/}

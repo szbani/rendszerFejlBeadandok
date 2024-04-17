@@ -1,4 +1,4 @@
-# Rendszerfejlsztés beadandó 1(Server)
+# Rendszerfejlsztés beadandó
 
 ## Futtatáshoz szükséges lépések
 
