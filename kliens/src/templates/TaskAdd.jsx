@@ -11,7 +11,7 @@ import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {useParams} from "react-router-dom";
 
-export default function TaskAddButton(GetTasks) {
+export default function TaskAddButton({GetTasks}) {
     const [open, setOpen] = useState(false);
     const handleclose = () => {
         setOpen(false);
@@ -72,10 +72,10 @@ function TaskAddDialog({open, onClose,GetTasks}) {
         }).then(response => response.json())
             .then(data => {
                 console.log(data);
+                onClose();
+                GetTasks();
             }).catch(data => {
             console.log(data);
-            onClose();
-            GetTasks();
         })
         console.log(formData);
     }
