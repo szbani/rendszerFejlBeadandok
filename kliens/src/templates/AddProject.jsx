@@ -4,11 +4,11 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
-    DialogTitle, FormControl, MenuItem,
+    DialogTitle, FormControl, Grid, MenuItem,
     Select,
     TextField
 } from "@mui/material";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export default function AddProjectButton() {
     const [open, setOpen] = useState(false);
@@ -33,14 +33,44 @@ function AddProjectDialog({open, onClose}) {
     const [projectName, setProjectName] = useState("");
     const [projectType, setProjectType] = useState("");
     const [projectDesc, setProjectDesc] = useState("");
+    const [project_types, setTypeArray] = useState([]);
+
+    const getProjectTypes = () => {
+        fetch('http://localhost:8080/api/projecttypes')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                setTypeArray(data);
+            }).catch(data => {
+                console.log("types received");
+            setTypeArray([]);
+        });
+    }
+
+    useEffect(() => {
+        getProjectTypes();
+    },[]);
 
     const handleSubmit = () => {
         console.log("submit");
         const formData = {
             name: projectName,
-            type: projectType,
+            type_id: projectType,
             description: projectDesc
         }
+        fetch('http://localhost:8080/api/project/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        }).then(response => response.json())
+            .then(data => {
+                console.log(data);
+            }).catch(data => {
+            console.log(data);
+
+        })
         console.log(formData);
     }
 
@@ -57,22 +87,34 @@ function AddProjectDialog({open, onClose}) {
     };
 
     return (
-        <div>
-            <FormControl>
+        <Dialog fullWidth maxWidth={"sm"} open={open} onClose={onClose}>
+            <FormControl marginNormal>
                 <DialogTitle>Projekt hozzáadása</DialogTitle>
                 <DialogContent>
-                <TextField id="project-name" label="Name" variant="outlined" value={projectName} onChange={handleProjectNameChange}/>
-                <Select
+                    <TextField sx={{marginTop:"12px"}} label={"Projekt neve"} value={projectName} onChange={handleProjectNameChange} fullWidth/>
+                    <TextField sx={{marginY:"12px"}} label={"Projekt leírása"} value={projectDesc} onChange={handleProjectDescriptionChange}
+                               fullWidth/>
+                    <Grid   container spacing={2}>
+                        <Grid item xs={7}>
+                <TextField
                     id="ProjectType"
                     value={projectType}
                     label="Type"
                     onChange={handleProjectTypeChange}
+                    select
+                    fullWidth
                 >
-                    <MenuItem value={10}>One</MenuItem>
-                    <MenuItem value={20}>Two</MenuItem>
-                    <MenuItem value={30}>Three</MenuItem>
-                </Select>
-                <TextField id="project-desc" label="Description" variant="outlined" value={projectDesc} onChange={handleProjectDescriptionChange}/>
+                    <MenuItem value="" disabled>
+                        Válassz Projekt típust
+                    </MenuItem>
+                    {project_types.map((projectType) => {
+                        return <MenuItem key={projectType._id} value={projectType._id}>{projectType.name}</MenuItem>
+                        }
+                    )}
+                </TextField>
+                        </Grid>
+                    </Grid>
+
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={onClose}>Mégse</Button>
@@ -80,7 +122,7 @@ function AddProjectDialog({open, onClose}) {
                 </DialogActions>
             </FormControl>
 
-        </div>
+        </Dialog>
     )
 }
 
