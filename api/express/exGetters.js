@@ -94,16 +94,7 @@ router.get('/project/:id', async (req, res) => {
         res.status(500).send();
     }
 });
-router.get('/projects/:projectTypeId', async (req, res) => {
-    try {
-        const projectTypeId = req.params.project
-        TypeId;
-        const projects = await getProjectsByProjectTypeId(projectTypeId);
-        res.json(projects);
-    } catch (error) {
-        res.status(500).send();
-    }
-});
+
 router.get('/project/:projectId/tasks', async (req, res) => {
     try {
         const projectId = req.params.projectId;

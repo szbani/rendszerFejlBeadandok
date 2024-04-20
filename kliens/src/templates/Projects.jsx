@@ -4,12 +4,20 @@ import {Box, Button, Typography} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid'
 import {useNavigate} from "react-router-dom";
 import AddProjectButton from "./AddProject";
+import {checkToken} from "../App";
 
 
 function Projects() {
     const [projects, setProjects] = useState([]);
     const getProjects = () => {
-        fetch('http://localhost:8080/api/projects')
+        fetch('http://localhost:8080/api/projects',
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('token')
+                }
+            })
             .then(response => response.json())
             .then(data => {
                 console.log(data);
@@ -23,7 +31,11 @@ function Projects() {
 
     const DeleteProject = (ProjectID) => {
         fetch('http://localhost:8080/api/project/'+ProjectID, {
-            method:'DELETE'
+            method:'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            }
         }).then(response => response.json())
             .then(data => {
                 console.log(data);
@@ -34,6 +46,7 @@ function Projects() {
     }
 
     useEffect(() => {
+        checkToken();
         getProjects();
     }, []);
 

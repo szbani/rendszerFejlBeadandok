@@ -29,7 +29,7 @@ export default function TaskAddButton({GetTasks}) {
 
 }
 
-function TaskAddDialog({open, onClose,GetTasks}) {
+function TaskAddDialog({open, onClose, GetTasks}) {
 
     const [taskName, setTaskName] = useState("");
     const [taskDesc, setTaskDescription] = useState("");
@@ -40,7 +40,13 @@ function TaskAddDialog({open, onClose,GetTasks}) {
     const params = useParams();
 
     const getManagers = () => {
-        fetch('http://localhost:8080/api/managers')
+        fetch('http://localhost:8080/api/managers', {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 console.log(data);
@@ -66,7 +72,8 @@ function TaskAddDialog({open, onClose,GetTasks}) {
         fetch('http://localhost:8080/api/project/' + projectID + '/task', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
             },
             body: JSON.stringify(formData)
         }).then(response => response.json())

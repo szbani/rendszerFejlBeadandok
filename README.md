@@ -21,3 +21,7 @@
   - Megnyitjuk a projeknek a mappáját cmd vagy a fejlesztői környezetünkben.
   - A konzolba beírjuk a(z) **npm run client** parancsot.
   - Megnyitjuk a böngészőnket és a következő címet írjuk be: **http://localhost:3000/**
+
+### Bejelentkezési adatok
+  - Felhasználónév: **harmonika@gmail.com**
+  - Jelszó: **password**

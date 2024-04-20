@@ -34,7 +34,13 @@ function AddProjectDialog({open, onClose, getProjects}) {
     const [project_types, setTypeArray] = useState([]);
 
     const getProjectTypes = () => {
-        fetch('http://localhost:8080/api/projecttypes')
+        fetch('http://localhost:8080/api/projecttypes',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            }
+        })
             .then(response => response.json())
             .then(data => {
                 console.log(data);
@@ -59,7 +65,8 @@ function AddProjectDialog({open, onClose, getProjects}) {
         fetch('http://localhost:8080/api/project/', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
             },
             body: JSON.stringify(formData)
         }).then(response => response.json())

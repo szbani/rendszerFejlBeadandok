@@ -4,13 +4,14 @@ const getters = require('./express/exGetters');
 const deletes = require('./express/exDeletes');
 const uploads = require('./express/uploadFile');
 const updates = require('./express/exUpdates');
+const {router} = require('./auth/Authorization')
 
 // const createWebSocketServer = require('./websocket/ws');
 const {connectToDatabase} = require('./Mongo/MongoServer');
 connectToDatabase();
 
-const swaggerUI = require('swagger-ui-express');
-const swaggerSpec = require('./swagger/swagger');
+// const swaggerUI = require('swagger-ui-express');
+// const swaggerSpec = require('./swagger/swagger');
 
 const cors = require('cors');
 
@@ -33,6 +34,7 @@ app.use('/api', getters);
 app.use('/api', deletes);
 app.use('/api', uploads);
 app.use('/api', updates);
+app.use('/api', router);
 
 process.on('SIGINT', () => {
     console.log('Closing server');

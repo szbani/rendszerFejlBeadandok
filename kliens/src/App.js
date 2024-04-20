@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, {useEffect,useState} from 'react';
 import {Container, AppBar, Toolbar, Typography, ThemeProvider, createTheme, Button, IconButton} from '@mui/material';
 import {huHU as hu} from '@mui/material/locale';
 import {huHU as hu2} from '@mui/x-data-grid/locales';
@@ -10,6 +10,7 @@ import HouseIcon from '@mui/icons-material/House';
 
 import Projects from './templates/Projects';
 import Tasks from './templates/Tasks';
+import Developers from './templates/Developers';
 import Login from "./templates/Login";
 
 const theme = createTheme(
@@ -32,7 +33,7 @@ const router = createBrowserRouter([
     },
     {
         path: '/project/:projectID',
-        element: <Tasks/>
+        element: <div><Tasks/><Developers/></div>
     },
     {
         path: '/login',
@@ -41,7 +42,33 @@ const router = createBrowserRouter([
 
 ]);
 
+export const checkToken = () => {
+    const token = localStorage.getItem('token');
+    fetch('http://localhost:8080/api/verify', {
+        method: 'GET',
+        headers: {
+            'Authorization': token
+        }
+    }).then(response => response.json())
+        .then(data => {
+            // console.log(response);
+            console.log(data);
+            console.log(data.statusCode);
+            if (data.statusCode != 200) {
+                router.navigate('/login');
+            }
+        }).catch(err => {
+        console.error(err);
+    });
+
+}
+
 function App() {
+    const [loggedIn, setLoggedIn] = useState(false);
+
+    useEffect(() => {
+        checkToken();
+    }, []);
 
     return (
         <div className="App">
