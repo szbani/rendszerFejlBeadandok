@@ -59,6 +59,9 @@ function Projects({CheckToken, loggedIn}) {
             {projects.length > 0 ?
                 <DataGrid
                     rows={projects}
+                    pageSizeOptions={[5, 10, 20]}
+                    initialState={{pagination: { paginationModel: {pageSize: 5, page: 0}}}}
+                    autoHeight={true}
                     columns={[
                         // {field: '_id', minWidth: 150, flex: 0.5},
                         {field: 'name', headerName: "Projekt", minWidth: 150, flex: 0.5},

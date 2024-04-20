@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import {useEffect, useState} from "react";
 
-export default function AddProjectButton(getProjects) {
+export default function AddProjectButton({getProjects}) {
     const [open, setOpen] = useState(false);
     const handleclose = () => {
         setOpen(false);

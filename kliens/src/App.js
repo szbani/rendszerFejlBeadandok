@@ -53,10 +53,10 @@ function App() {
         }).then(response => response.json())
             .then(data => {
                 // console.log(response);
-                console.log(data);
-                console.log(data.statusCode);
+                // console.log(data);
+                // console.log(data.statusCode);
                 if (data.statusCode != 200) {
-                    router('/login');
+                    router.navigate('/login');
                 }
             }).catch(err => {
             console.error(err);

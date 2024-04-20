@@ -104,7 +104,7 @@ router.post('/project', async (req, res) => {
             return;
         }
         let jsonMessage = req.body;
-        console.log(jsonMessage);
+        // console.log(jsonMessage);
 
         if (jsonMessage.name == undefined) {
             errors.push('Name is required');
@@ -139,13 +139,16 @@ router.post('/project', async (req, res) => {
 router.post('/project/:id/task', async (req, res) => {
     try{
         // console.log(req.body);
-        const token = verifyTokenManager(req, res);
-        if (token.statusCode != 200) {
+        const res2 = verifyTokenManager(req, res);
+        // console.log(res2.statusCode);
+        // console.log(res.statusCode);
+        if (res.statusCode != 200) {
+            // console.log('Error')
             return;
         }
         let jsonMessage = req.body;
         jsonMessage.project_id = req.params.id;
-        console.log(jsonMessage);
+        // console.log(jsonMessage);
         if (jsonMessage.project_id == undefined) {
             errors.push('ID is required');
         }else if (!mongoose.Types.ObjectId.isValid(jsonMessage.project_id)) {
@@ -210,7 +213,7 @@ router.post('/project/:id/developer', async (req, res) => {
         }
         // console.log(req.body);
         let jsonMessage = req.body;
-        console.log(jsonMessage);
+        // console.log(jsonMessage);
 
         if (jsonMessage.dev_id == undefined) {
             errors.push('ID is required');

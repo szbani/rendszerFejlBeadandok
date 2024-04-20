@@ -6,50 +6,49 @@ const router = require('express').Router();
 
 const verifyTokenManager = (req, res, next) => {
     const token = req.headers['authorization'];
-    console.log(req.headers['authorization']);
+    // console.log(req.headers['authorization']);
     // console.log(token);
     if (!token) {
-        return res.status(403).send({msg: 'A token is required for authentication'});
+        res.status(403).send({msg: 'A token is required for authentication'});
     }
     try {
         const decoded = jwt.verify(token, secret);
-        console.log(decoded);
+        // console.log(decoded);
         req.user = decoded.user;
         const time = new Date().getTime() / 1000;
         if (decoded.exp < time) {
-            return res.status(401).send({msg: 'Token has expired'});
+            res.status(401).send({msg: 'Token has expired',statusCode: 401});
         }
         if (req.user.email === 'Guest') {
-            return res.status(401).send({msg: 'Unauthorized'});
+            res.status(401).send({msg: 'Unauthorized',statusCode: 401});
         }
-        return res.status(200).send({msg: 'Token is valid'});
+        res.status(200);
     } catch (err) {
         console.error("Invalid token: " + err);
-        return res.status(401).send({msg: 'Invalid Token'});
+        res.status(401).send({msg: 'Invalid Token',statusCode: 401});
     }
-
-
+    return res;
 }
 
 const verifyToken = (req, res, next) => {
     const token = req.headers['authorization'];
     // console.log(token);
     if (!token) {
-        return res.status(403).send({msg: 'A token is required for authentication'});
+        res.status(403).send({msg: 'A token is required for authentication'});
     }
     try {
         const decoded = jwt.verify(token, secret);
         req.user = decoded.user;
         const time = new Date().getTime() / 1000;
         if (decoded.exp < time) {
-            return res.status(401).send({msg: 'Token has expired'});
+            res.status(401).send({msg: 'Token has expired',statusCode: 401});
         }
-        return res.status(200);
+        res.status(200);
     } catch (err) {
         console.error("Invalid token: " + err);
-        return res.status(401).send({msg: 'Invalid Token'});
+        res.status(401).send({msg: 'Invalid Token',statusCode: 401});
     }
-
+    return res;
 }
 
 const createToken = async (req) => {
@@ -88,6 +87,7 @@ router.post('/login', async (req, res) => {
 );
 
 router.get('/verify', verifyToken, (req, res) => {
+
 });
 
 
