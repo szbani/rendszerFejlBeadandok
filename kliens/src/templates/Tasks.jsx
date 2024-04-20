@@ -56,7 +56,7 @@ function Tasks() {
             fetch('http://localhost:8080/api/project/' + projectID + '/tasks')
                 .then(response => response.json())
                 .then(data => {
-                    // console.log(data);
+                    console.log(data);
                     setTasks(data);
                     // setProjectName(data[0].project);
                 }).catch(data => {
@@ -72,7 +72,7 @@ function Tasks() {
             fetch('http://localhost:8080/api/project/' + projectID)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
+                    // console.log(data);
                     setProjectName(data.name);
                 }).catch(data => {
                 setProjectName('');

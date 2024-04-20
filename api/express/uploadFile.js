@@ -158,8 +158,6 @@ router.post('/project/:id/task', async (req, res) => {
 
         if (jsonMessage.deadline == undefined) {
             errors.push('Deadline is required');
-        } else if (new Date(jsonMessage.deadline) == 'Invalid Date'){
-            errors.push('Deadline must be a date');
         } else if (new Date(jsonMessage.deadline) < new Date(Date.now()) ) {
             errors.push('Deadline must be a date in the future');
         }

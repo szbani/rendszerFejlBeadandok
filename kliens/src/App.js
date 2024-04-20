@@ -1,25 +1,16 @@
 import './App.css';
 import React from 'react';
-import {Container, AppBar, Toolbar, Typography, ThemeProvider, createTheme} from '@mui/material';
+import {Container, AppBar, Toolbar, Typography, ThemeProvider, createTheme, Button, IconButton} from '@mui/material';
 import {huHU as hu} from '@mui/material/locale';
 import {huHU as hu2} from '@mui/x-data-grid/locales';
 import {huHU as hu3} from '@mui/x-date-pickers/locales';
 // import ws from "./ws/ws";
-import {Routes, Route, BrowserRouter} from 'react-router-dom';
+import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import HouseIcon from '@mui/icons-material/House';
 
 import Projects from './templates/Projects';
 import Tasks from './templates/Tasks';
-// const HandleNavigate = (props) => {
-//     const navigate = useNavigate();
-//     // console.log(props);
-//     const handleClick = () => {
-//         navigate(props.path);
-//     }
-//     return (
-//         <Button variant={"outlined"} onClick={handleClick} sx={{mb: 3}}>{props.text}</Button>
-//     )
-//
-// }
+import Login from "./templates/Login";
 
 const theme = createTheme(
     {
@@ -34,42 +25,48 @@ const theme = createTheme(
     hu3,
 );
 
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            newTaskName: '',
-            newTaskDescription: '',
-            selectedDeveloper: '',
-        }
-
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <Projects/>
+    },
+    {
+        path: '/project/:projectID',
+        element: <Tasks/>
+    },
+    {
+        path: '/login',
+        element: <Login/>
     }
 
-    render() {
-        return (
-            <div className="App">
-                <ThemeProvider theme={theme}>
-                    <AppBar sx={{mb: 5}} position={"sticky"}>
-                        <Toolbar>
-                            <Typography variant={"h6"} component={"div"}>Redmine</Typography>
-                        </Toolbar>
-                    </AppBar>
-                    <Container>
-                        <BrowserRouter basename={'/'}>
-                            {/*<HandleNavigate path={'/'} text={'Projects'}></HandleNavigate>*/}
-                            <Routes>
-                                <Route path='/project/:projectID/tasks'
-                                       element={<Tasks/>}/>
-                                <Route path='/'
-                                       element={<Projects/>}/>
-                            </Routes>
-                        </BrowserRouter>
+]);
 
-                    </Container>
-                </ThemeProvider>
-            </div>
-        );
-    }
+function App() {
+
+    return (
+        <div className="App">
+            <ThemeProvider theme={theme}>
+                <AppBar position={"sticky"} sx={{marginBottom:'24px'}}>
+                    <Toolbar>
+                        <IconButton
+                            size={"large"}
+                            edge={"start"}
+                            aria-label={"Projects"}
+                            color={"inherit"}
+                            onClick={() => router.navigate('/')}
+                        >
+                            <HouseIcon/>
+                        </IconButton>
+                        <Typography variant={"h6"} component={'div'}>Redmine</Typography>
+                        <Button color={"inherit"} sx={{ml: 'auto'}} onClick={() => router.navigate('/login')}>Login</Button>
+                    </Toolbar>
+                </AppBar>
+                <Container>
+                    <RouterProvider router={router} />
+                </Container>
+            </ThemeProvider>
+        </div>
+    );
 }
 
 export default App;

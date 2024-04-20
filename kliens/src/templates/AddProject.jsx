@@ -3,10 +3,8 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle, FormControl, Grid, MenuItem,
-    Select,
-    TextField, Typography
+    TextField
 } from "@mui/material";
 import {useEffect, useState} from "react";
 
@@ -90,7 +88,7 @@ function AddProjectDialog({open, onClose, getProjects}) {
 
     return (
         <Dialog fullWidth maxWidth={"sm"} open={open} onClose={onClose}>
-            <FormControl marginNormal>
+            <FormControl>
                 <DialogTitle>Projekt hozzáadása</DialogTitle>
                 <DialogContent>
                     <TextField sx={{marginTop:"12px"}} label={"Projekt neve"} value={projectName} onChange={handleProjectNameChange} fullWidth/>

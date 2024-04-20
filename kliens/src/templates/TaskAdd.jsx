@@ -71,13 +71,13 @@ function TaskAddDialog({open, onClose,GetTasks}) {
             body: JSON.stringify(formData)
         }).then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 onClose();
                 GetTasks();
             }).catch(data => {
-            console.log(data);
+            // console.log(data);
         })
-        console.log(formData);
+        // console.log(formData);
     }
 
     const handleTaskNameChange = (event) => {

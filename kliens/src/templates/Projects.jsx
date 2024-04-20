@@ -42,7 +42,7 @@ function Projects() {
             <Typography align={"left"} variant={"h4"}>Projektek</Typography>
             <Box justifyContent={"flex-end"} display={"flex"}>
                 <AddProjectButton getProjects={getProjects}/>
-                <Button variant={"outlined"} onClick={getProjects} sx={{mb: 1}}>Refresh projects</Button>
+                <Button variant={"outlined"} onClick={getProjects} sx={{mb: 1}}>Frissítés</Button>
             </Box>
             <Typography>Kattints duplán a projektre a feladatokért</Typography>
             {projects.length > 0 ?
@@ -68,7 +68,7 @@ function Projects() {
                     getRowId={(row) => row._id}
                     onRowDoubleClick={(row) => {
                         // console.log(row);
-                        navigate('/project/' + row.row._id + '/tasks');
+                        navigate('/project/' + row.row._id );
                     }}
                 ></DataGrid>
                 : <p>'No projects'</p>
