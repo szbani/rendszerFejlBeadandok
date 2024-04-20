@@ -1,9 +1,9 @@
-import {Box, Button, FormControl, TextField, Typography} from "@mui/material";
+import {Box, Button, FormControl, Grid, TextField, Typography} from "@mui/material";
 import {useState} from "react";
 import {decodeToken} from "react-jwt";
 import {useNavigate} from "react-router-dom";
 
-export default function Login() {
+export default function Login({setLoggedIn}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -32,6 +32,7 @@ export default function Login() {
                 // console.log(data);
                 localStorage.setItem('token', data.token);
                 navigate('/');
+                setLoggedIn(true);
                 // console.log(decodeToken(data.token).user.email);
             }).catch(err => {
             console.error(err);
@@ -78,17 +79,23 @@ export default function Login() {
     return (
         <div>
             <FormControl>
-                <Typography variant={"h4"} marginBottom={"12px"}>Bejelentkezés</Typography>
+                <Typography variant={"h4"} marginTop={"24px"} marginBottom={"24px"}>Bejelentkezés</Typography>
                 <Box>
-                    <TextField label={"Email"} variant={"outlined"} sx={{mb: 3}} onChange={handleUsernameChange}/>
+                    <TextField label={"Email"} variant={"outlined"} sx={{mr: 3, mb: 3}}
+                               onChange={handleUsernameChange}/>
                     <TextField label={"Jelszó"} variant={"outlined"} sx={{mb: 3}} onChange={handlePasswordChange}/>
 
                 </Box>
-                <Box>
-                    <Button variant={"contained"} onClick={handleSubmit}>Bejelentkezés</Button>
-                    {/*<Button variant={"contained"} onClick={verifyTest}>Verify</Button>*/}
-                    <Button variant={"contained"} onClick={handleGuest}>Vendég</Button>
-                </Box>
+                <Grid>
+                    <Button variant={"contained"} sx={{maxWidth: '200px', width: 'min-content'}}
+                            onClick={handleSubmit}>Bejelentkezés</Button>
+                </Grid>
+                {/*<Button variant={"contained"} onClick={verifyTest}>Verify</Button>*/}
+                <Grid marginTop={2}>
+                    <Button variant={"contained"} sx={{maxWidth: '200px', width: 'min-content'}}
+                            onClick={handleGuest}>Vendég</Button>
+                </Grid>
+
             </FormControl>
         </div>
     )

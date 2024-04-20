@@ -3,8 +3,9 @@ import {useNavigate, useParams} from "react-router-dom";
 import {Button, Grid, Typography} from "@mui/material";
 import TaskAddButton from "./TaskAdd";
 import {DataGrid} from "@mui/x-data-grid";
+import DeveloperAddButton from "./AddDeveloper";
 
-function Developers() {
+function Developers({loggedIn}) {
     const [developers, setDevelopers] = React.useState([]);
     const params = useParams();
     const [projectName, setProjectName] = React.useState('');
@@ -19,8 +20,8 @@ function Developers() {
     }
 
     const DeleteDeveloper = (developerID) => {
-        console.log(developerID);
-        fetch('http://localhost:8080/api/project/' + params.projectID + '/developers', {
+        // console.log(developerID);
+        fetch('http://localhost:8080/api/project/' + params.projectID + '/developer/' +developerID, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -67,7 +68,7 @@ function Developers() {
                     <Typography  variant={"h5"} align={"left"}>Fejlesztők</Typography>
                 </Grid>
                 <Grid display={"flex"} justifyContent={"flex-end"} item xs={6}>
-                    {/*<DeveloperAddButton GetDevelopers={GetDevelopers}/>*/}
+                    {loggedIn ? <DeveloperAddButton GetDevelopers={GetDevelopers}/>: null}
                     <DeveloperRefreshButton />
                 </Grid>
             </Grid>
@@ -98,6 +99,7 @@ function Developers() {
                                 }
                             }
                         ]}
+                        columnVisibilityModel={{delete: loggedIn}}
                         getRowId={(row) => row._id}
 
                     ></DataGrid>

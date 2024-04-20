@@ -33,7 +33,7 @@ app.use((req,res,next) => {
 app.use('/api', getters);
 app.use('/api', deletes);
 app.use('/api', uploads);
-app.use('/api', updates);
+// app.use('/api', updates);
 app.use('/api', router);
 
 process.on('SIGINT', () => {

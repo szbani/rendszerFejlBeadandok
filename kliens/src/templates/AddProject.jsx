@@ -34,7 +34,7 @@ function AddProjectDialog({open, onClose, getProjects}) {
     const [project_types, setTypeArray] = useState([]);
 
     const getProjectTypes = () => {
-        fetch('http://localhost:8080/api/projecttypes',{
+        fetch('http://localhost:8080/api/projecttypes', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -44,16 +44,17 @@ function AddProjectDialog({open, onClose, getProjects}) {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
+                // console.log
                 setTypeArray(data);
             }).catch(data => {
-                console.log("types received");
+            console.log("types received");
             setTypeArray([]);
         });
     }
 
     useEffect(() => {
         getProjectTypes();
-    },[]);
+    }, []);
 
     const handleSubmit = () => {
         console.log("submit");
@@ -98,27 +99,30 @@ function AddProjectDialog({open, onClose, getProjects}) {
             <FormControl>
                 <DialogTitle>Projekt hozzáadása</DialogTitle>
                 <DialogContent>
-                    <TextField sx={{marginTop:"12px"}} label={"Projekt neve"} value={projectName} onChange={handleProjectNameChange} fullWidth/>
-                    <TextField sx={{marginY:"12px"}} label={"Projekt leírása"} value={projectDesc} onChange={handleProjectDescriptionChange}
+                    <TextField sx={{marginTop: "12px"}} label={"Projekt neve"} value={projectName}
+                               onChange={handleProjectNameChange} fullWidth/>
+                    <TextField sx={{marginY: "12px"}} label={"Projekt leírása"} value={projectDesc}
+                               onChange={handleProjectDescriptionChange}
                                fullWidth/>
-                    <Grid   container spacing={2}>
+                    <Grid container spacing={2}>
                         <Grid item xs={7}>
-                <TextField
-                    id="ProjectType"
-                    value={projectType}
-                    label="Type"
-                    onChange={handleProjectTypeChange}
-                    select
-                    fullWidth
-                >
-                    <MenuItem value="" disabled>
-                        Válassz Projekt típust
-                    </MenuItem>
-                    {project_types.map((projectType) => {
-                        return <MenuItem key={projectType._id} value={projectType._id}>{projectType.name}</MenuItem>
-                        }
-                    )}
-                </TextField>
+                            <TextField
+                                id="ProjectType"
+                                value={projectType}
+                                label="Type"
+                                onChange={handleProjectTypeChange}
+                                select
+                                fullWidth
+                            >
+                                <MenuItem value="" disabled>
+                                    Válassz Projekt típust
+                                </MenuItem>
+                                {project_types.map((projectType) => {
+                                        return <MenuItem key={projectType._id}
+                                                         value={projectType._id}>{projectType.name}</MenuItem>
+                                    }
+                                )}
+                            </TextField>
                         </Grid>
                     </Grid>
 

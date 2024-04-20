@@ -7,7 +7,7 @@ import {ArrowBack} from "@mui/icons-material";
 import TaskAddButton from "./TaskAdd";
 import {useNavigate} from "react-router-dom";
 
-function Tasks() {
+function Tasks({loggedIn}) {
     const [tasks, setTasks] = React.useState([]);
     const params = useParams();
     const [projectName, setProjectName] = React.useState('');
@@ -107,9 +107,10 @@ function Tasks() {
             <Grid container spacing={2}>
                 <Grid display={"flex"} justifyContent={"flex-start"} item xs={6}>
                     <BackToProjectsButton/>
+                    <Typography variant={"h5"}>Feladatok</Typography>
                 </Grid>
                 <Grid display={"flex"} justifyContent={"flex-end"} item xs={6}>
-                    <TaskAddButton GetTasks={GetTasks}/>
+                    {loggedIn ? <TaskAddButton GetTasks={GetTasks}/> : null}
                     <TaskRefreshButton/>
                 </Grid>
             </Grid>
@@ -143,6 +144,7 @@ function Tasks() {
                                 }
                             }
                         ]}
+                        columnVisibilityModel={{delete: loggedIn}}
                         getRowId={(row) => row._id}
 
                     ></DataGrid>

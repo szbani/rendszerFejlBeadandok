@@ -4,10 +4,8 @@ import {Box, Button, Typography} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid'
 import {useNavigate} from "react-router-dom";
 import AddProjectButton from "./AddProject";
-import {checkToken} from "../App";
 
-
-function Projects() {
+function Projects({CheckToken, loggedIn}) {
     const [projects, setProjects] = useState([]);
     const getProjects = () => {
         fetch('http://localhost:8080/api/projects',
@@ -30,8 +28,8 @@ function Projects() {
     const navigate = useNavigate();
 
     const DeleteProject = (ProjectID) => {
-        fetch('http://localhost:8080/api/project/'+ProjectID, {
-            method:'DELETE',
+        fetch('http://localhost:8080/api/project/' + ProjectID, {
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': localStorage.getItem('token')
@@ -40,13 +38,13 @@ function Projects() {
             .then(data => {
                 console.log(data);
                 getProjects();
-            }).catch(data =>{
-                getProjects();
+            }).catch(data => {
+            getProjects();
         });
     }
 
     useEffect(() => {
-        checkToken();
+        CheckToken();
         getProjects();
     }, []);
 
@@ -54,7 +52,7 @@ function Projects() {
         <div>
             <Typography align={"left"} variant={"h4"}>Projektek</Typography>
             <Box justifyContent={"flex-end"} display={"flex"}>
-                <AddProjectButton getProjects={getProjects}/>
+                {loggedIn ? <AddProjectButton getProjects={getProjects}/> : null}
                 <Button variant={"outlined"} onClick={getProjects} sx={{mb: 1}}>Frissítés</Button>
             </Box>
             <Typography>Kattints duplán a projektre a feladatokért</Typography>
@@ -78,10 +76,11 @@ function Projects() {
                             }
                         }
                     ]}
+                    columnVisibilityModel={{delete: loggedIn}}
                     getRowId={(row) => row._id}
                     onRowDoubleClick={(row) => {
                         // console.log(row);
-                        navigate('/project/' + row.row._id );
+                        navigate('/project/' + row.row._id);
                     }}
                 ></DataGrid>
                 : <p>'No projects'</p>

@@ -80,9 +80,10 @@ router.delete('/project/:projectID/task/:taskId', async (req, res) => {
 router.delete('/project/:projectId/developer/:developerId', async (req, res) => {
     try {
         const token = verifyTokenManager(req, res);
+        console.log(token.statusCode);
         if (token.statusCode == 200) {
             const projectId = req.params.projectId;
-            const developerId = req.body.developerId;
+            const developerId = req.params.developerId;
             const deleteDev = await projectDevSchema.findOneAndDelete({project_id: projectId, developer_id: developerId});
             if (!deleteDev) {
                 return res.status(404).json({message: `Developer with developer id: ${developerId} not found on project with id: ${projectId} !`});

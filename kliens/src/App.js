@@ -12,6 +12,7 @@ import Projects from './templates/Projects';
 import Tasks from './templates/Tasks';
 import Developers from './templates/Developers';
 import Login from "./templates/Login";
+import {decodeToken} from "react-jwt";
 
 const theme = createTheme(
     {
@@ -26,49 +27,57 @@ const theme = createTheme(
     hu3,
 );
 
-const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Projects/>
-    },
-    {
-        path: '/project/:projectID',
-        element: <div><Tasks/><Developers/></div>
-    },
-    {
-        path: '/login',
-        element: <Login/>
-    }
-
-]);
-
-export const checkToken = () => {
+export function checkLoggedIn(){
     const token = localStorage.getItem('token');
-    fetch('http://localhost:8080/api/verify', {
-        method: 'GET',
-        headers: {
-            'Authorization': token
-        }
-    }).then(response => response.json())
-        .then(data => {
-            // console.log(response);
-            console.log(data);
-            console.log(data.statusCode);
-            if (data.statusCode != 200) {
-                router.navigate('/login');
-            }
-        }).catch(err => {
-        console.error(err);
-    });
-
+    if(token == undefined || decodeToken(token).user.email == 'Guest'){
+        return false;
+    }
+    return true;
 }
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
-
     useEffect(() => {
-        checkToken();
+        // CheckToken();
+        // console.log(decodeToken(token).user.email);
+        setLoggedIn(checkLoggedIn());
     }, []);
+
+    const CheckToken = () =>{
+        const token = localStorage.getItem('token');
+        fetch('http://localhost:8080/api/verify', {
+            method: 'GET',
+            headers: {
+                'Authorization': token
+            }
+        }).then(response => response.json())
+            .then(data => {
+                // console.log(response);
+                console.log(data);
+                console.log(data.statusCode);
+                if (data.statusCode != 200) {
+                    router('/login');
+                }
+            }).catch(err => {
+            console.error(err);
+        });
+    }
+
+    const router = createBrowserRouter([
+        {
+            path: '/',
+            element: <Projects CheckToken={CheckToken} loggedIn={loggedIn}/>
+        },
+        {
+            path: '/project/:projectID',
+            element: <div><Tasks loggedIn={loggedIn}/><Developers loggedIn={loggedIn}/></div>
+        },
+        {
+            path: '/login',
+            element: <Login setLoggedIn={setLoggedIn}/>
+        }
+
+    ]);
 
     return (
         <div className="App">
@@ -85,7 +94,15 @@ function App() {
                             <HouseIcon/>
                         </IconButton>
                         <Typography variant={"h6"} component={'div'}>Redmine</Typography>
+                        {!loggedIn ?
                         <Button color={"inherit"} sx={{ml: 'auto'}} onClick={() => router.navigate('/login')}>Login</Button>
+                            :
+                            <Button color={"inherit"} sx={{ml: 'auto'}} onClick={() => {
+                                localStorage.removeItem('token');
+                                setLoggedIn(false);
+                                router.navigate('/login');
+                            }}>Logout</Button>
+                        }
                     </Toolbar>
                 </AppBar>
                 <Container>

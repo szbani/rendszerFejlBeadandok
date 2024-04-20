@@ -9,87 +9,100 @@ const projectTypeSchema = require("../../schemas/Project_Types");
 const projectDevSchema = require("../../schemas/Project_Developers");
 
 const mongoose = require("mongoose");
+const {verifyTokenManager} = require("../auth/Authorization");
 let errors = [];
 
-router.post('/manager', async (req, res) => {
-    try{
-        // console.log(req.body);
-        let jsonMessage = req.body;
-        console.log(jsonMessage);
-        
-        if (jsonMessage.name == undefined) {
-            errors.push('Name is required');
-        } else if (jsonMessage.name.trim().length < 3) {
-            errors.push('Name must be at least 3 characters long');
-        }
+// router.post('/manager', async (req, res) => {
+//     try{
+//         // console.log(req.body);
+// const token = verifyTokenManager(req, res);
+//         if (token.statusCode != 200) {
+//             return;
+//         }
+//         let jsonMessage = req.body;
+//         console.log(jsonMessage);
+//
+//         if (jsonMessage.name == undefined) {
+//             errors.push('Name is required');
+//         } else if (jsonMessage.name.trim().length < 3) {
+//             errors.push('Name must be at least 3 characters long');
+//         }
+//
+//         if (jsonMessage.email == undefined) {
+//             errors.push('Email is required');
+//         } else if (await managerSchema.findOne({email: jsonMessage.email})) {
+//             errors.push('Email already exists');
+//         }
+//
+//         if (jsonMessage.password == undefined) {
+//             errors.push('Password is required');
+//         } else if (jsonMessage.password.trim().length < 6) {
+//             errors.push('Password must be at least 6 characters long');
+//         }
+//
+//         if (errors.length > 0) {
+//             res.status(500).json({error: errors});
+//             errors = [];
+//             return;
+//         }
+//
+//         const manager = new managerSchema(jsonMessage);
+//         await manager.save();
+//         res.status(200).json({message: 'Manager added'});
+//
+//
+//
+//     }catch(error){
+//         res.status(500).send();
+//         console.log(error);
+//     }
+// })
 
-        if (jsonMessage.email == undefined) {
-            errors.push('Email is required');
-        } else if (await managerSchema.findOne({email: jsonMessage.email})) {
-            errors.push('Email already exists');
-        }
-
-        if (jsonMessage.password == undefined) {
-            errors.push('Password is required');
-        } else if (jsonMessage.password.trim().length < 6) {
-            errors.push('Password must be at least 6 characters long');
-        }
-
-        if (errors.length > 0) {
-            res.status(500).json({error: errors});
-            errors = [];
-            return;
-        }
-
-        const manager = new managerSchema(jsonMessage);
-        await manager.save();
-        res.status(200).json({message: 'Manager added'});
-
-
-
-    }catch(error){
-        res.status(500).send();
-        console.log(error);
-    }
-})
-
-router.post('/developer', async (req, res) => {
-    try{
-        // console.log(req.body);
-        let jsonMessage = req.body;
-        console.log(jsonMessage);
-
-        if (jsonMessage.name == undefined) {
-            errors.push('Name is required');
-        } else if (jsonMessage.name.trim().length < 3) {
-            errors.push('Name must be at least 3 characters long');
-        }
-
-        if (jsonMessage.email == undefined) {
-            errors.push('Email is required');
-        } else if (await developerSchema.findOne({email: jsonMessage.email})) {
-            errors.push('Email already exists');
-        }
-
-        if (errors.length > 0) {
-            res.status(500).json({error: errors});
-            errors = [];
-            return;
-        }
-
-        const developer = new developerSchema(jsonMessage);
-        await developer.save();
-        res.status(200).json({message: 'Developer added'});
-
-    }catch(error){
-        res.status(500).send();
-        console.log(error);
-    }
-})
+// router.post('/developer', async (req, res) => {
+//     try{
+//         // console.log(req.body);
+// const token = verifyTokenManager(req, res);
+//         if (token.statusCode != 200) {
+//             return;
+//         }
+//         let jsonMessage = req.body;
+//         console.log(jsonMessage);
+//
+//         if (jsonMessage.name == undefined) {
+//             errors.push('Name is required');
+//         } else if (jsonMessage.name.trim().length < 3) {
+//             errors.push('Name must be at least 3 characters long');
+//         }
+//
+//         if (jsonMessage.email == undefined) {
+//             errors.push('Email is required');
+//         } else if (await developerSchema.findOne({email: jsonMessage.email})) {
+//             errors.push('Email already exists');
+//         }
+//
+//         if (errors.length > 0) {
+//             res.status(500).json({error: errors});
+//             errors = [];
+//             return;
+//         }
+//
+//         const developer = new developerSchema(jsonMessage);
+//         await developer.save();
+//         res.status(200).json({message: 'Developer added'});
+//
+//     }catch(error){
+//         res.status(500).send();
+//         console.log(error);
+//     }
+// })
 
 router.post('/project', async (req, res) => {
     try{
         // console.log(req.body);
+        const token = verifyTokenManager(req, res);
+        if (token.statusCode != 200) {
+            return;
+        }
         let jsonMessage = req.body;
         console.log(jsonMessage);
 
@@ -126,7 +139,10 @@ router.post('/project', async (req, res) => {
 router.post('/project/:id/task', async (req, res) => {
     try{
         // console.log(req.body);
-
+        const token = verifyTokenManager(req, res);
+        if (token.statusCode != 200) {
+            return;
+        }
         let jsonMessage = req.body;
         jsonMessage.project_id = req.params.id;
         console.log(jsonMessage);
@@ -178,9 +194,13 @@ router.post('/project/:id/task', async (req, res) => {
     }
 })
 
-router.post('/project/:id/dev', async (req, res) => {
+router.post('/project/:id/developer', async (req, res) => {
     try{
         let id = req.params.id;
+        const token = verifyTokenManager(req, res);
+        if (token.statusCode != 200) {
+            return;
+        }
         if (id == undefined) {
             errors.push('ID is required');
         } else if (!mongoose.Types.ObjectId.isValid(id)) {

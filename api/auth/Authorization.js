@@ -33,7 +33,7 @@ const verifyTokenManager = (req, res, next) => {
 
 const verifyToken = (req, res, next) => {
     const token = req.headers['authorization'];
-    console.log(token);
+    // console.log(token);
     if (!token) {
         return res.status(403).send({msg: 'A token is required for authentication'});
     }
@@ -44,7 +44,7 @@ const verifyToken = (req, res, next) => {
         if (decoded.exp < time) {
             return res.status(401).send({msg: 'Token has expired'});
         }
-        return res.status(200).send({msg: 'Token is valid',statusCode: 200});
+        return res.status(200);
     } catch (err) {
         console.error("Invalid token: " + err);
         return res.status(401).send({msg: 'Invalid Token'});
