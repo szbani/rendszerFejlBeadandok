@@ -62,7 +62,7 @@ function TaskAddDialog({open, onClose, GetTasks}) {
 
     const handleSubmit = () => {
         const projectID = params.projectID;
-        console.log("submit");
+        // console.log("submit");
         const formData = {
             name: taskName,
             description: taskDesc,

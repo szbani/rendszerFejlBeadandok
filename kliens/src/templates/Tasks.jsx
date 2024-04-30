@@ -47,7 +47,7 @@ function Tasks({loggedIn}) {
             }
         }).then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 GetTasks();
             }).catch(data => {
             GetTasks();
@@ -65,7 +65,7 @@ function Tasks({loggedIn}) {
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
+                    // console.log(data);
                     setTasks(data);
                     // setProjectName(data[0].project);
                 }).catch(data => {

@@ -43,11 +43,11 @@ function AddProjectDialog({open, onClose, getProjects}) {
         })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 // console.log
                 setTypeArray(data);
             }).catch(data => {
-            console.log("types received");
+            // console.log("types received");
             setTypeArray([]);
         });
     }
@@ -96,6 +96,7 @@ function AddProjectDialog({open, onClose, getProjects}) {
 
     return (
         <Dialog fullWidth maxWidth={"sm"} open={open} onClose={onClose}>
+            { project_types.length > 0 ?
             <FormControl>
                 <DialogTitle>Projekt hozzáadása</DialogTitle>
                 <DialogContent>
@@ -131,7 +132,7 @@ function AddProjectDialog({open, onClose, getProjects}) {
                     <Button onClick={onClose}>Mégse</Button>
                     <Button onClick={handleSubmit}>Hozzáadás</Button>
                 </DialogActions>
-            </FormControl>
+            </FormControl>: null}
         </Dialog>
     )
 }

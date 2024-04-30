@@ -5,7 +5,7 @@ import {DataGrid} from '@mui/x-data-grid'
 import {useNavigate} from "react-router-dom";
 import AddProjectButton from "./AddProject";
 
-function Projects({CheckToken, loggedIn}) {
+function Projects({loggedIn}) {
     const [projects, setProjects] = useState([]);
     const getProjects = () => {
         fetch('http://localhost:8080/api/projects',
@@ -18,7 +18,7 @@ function Projects({CheckToken, loggedIn}) {
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 setProjects(data);
             }).catch(data => {
             setProjects([]);
@@ -36,7 +36,7 @@ function Projects({CheckToken, loggedIn}) {
             }
         }).then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 getProjects();
             }).catch(data => {
             getProjects();
@@ -44,7 +44,6 @@ function Projects({CheckToken, loggedIn}) {
     }
 
     useEffect(() => {
-        CheckToken();
         getProjects();
     }, []);
 

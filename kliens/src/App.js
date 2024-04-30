@@ -38,7 +38,7 @@ export function checkLoggedIn(){
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     useEffect(() => {
-        // CheckToken();
+        CheckToken();
         // console.log(decodeToken(token).user.email);
         setLoggedIn(checkLoggedIn());
     }, []);
@@ -52,21 +52,23 @@ function App() {
             }
         }).then(response => response.json())
             .then(data => {
+                // console.log(data.statusCode);
                 // console.log(response);
                 // console.log(data);
                 // console.log(data.statusCode);
                 if (data.statusCode != 200) {
                     router.navigate('/login');
+                    localStorage.removeItem('token');
                 }
             }).catch(err => {
-            console.error(err);
+                console.error(err);
         });
     }
 
     const router = createBrowserRouter([
         {
             path: '/',
-            element: <Projects CheckToken={CheckToken} loggedIn={loggedIn}/>
+            element: <Projects loggedIn={loggedIn}/>
         },
         {
             path: '/project/:projectID',
