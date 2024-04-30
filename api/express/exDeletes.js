@@ -44,6 +44,7 @@ router.delete('/developer/:id', async (req, res) => {
 router.delete('/project/:id', async (req, res) => {
     try {
         const token = verifyTokenManager(req, res);
+        console.log(token);
         if (token.statusCode == 200) {
             const projectId = req.params.id;
             const deleteProject = await projectSchema.findByIdAndDelete(projectId);

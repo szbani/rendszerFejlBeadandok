@@ -48,7 +48,7 @@ router.get('/manager/:id/tasks', async (req, res) => {
         const tasks = await getTasksByManagerId(managerID);
         res.json(tasks);
     } catch (error) {
-        res.status(500).send();
+        return res.status(500).send();
     }
 });
 router.get('/manager/:id/deadlines', async (req, res) => {
@@ -61,7 +61,7 @@ router.get('/manager/:id/deadlines', async (req, res) => {
         const tasksWithDeadline = await getTasksByManagerWithDeadlineInOneWeek(managerID);
         res.json(tasksWithDeadline);
     } catch (error) {
-        res.status(500).send();
+        return res.status(500).send();
     }
 });
 // router.get('/tasks', async (req, res) => {
@@ -81,7 +81,7 @@ router.get('/developers', async (req, res) => {
         const developers = await getDevelopers();
         res.json(developers);
     } catch (error) {
-        res.status(500).send();
+        return res.status(500).send();
     }
 });
 router.get('/project/:id/availableDevelopers', async (req, res) => {
@@ -103,12 +103,13 @@ router.get('/project/:id/availableDevelopers', async (req, res) => {
 router.get('/projects', async (req, res) => {
     try {
         const token = verifyToken(req, res);
+        // console.log(token.statusCode);
         if (token.statusCode != 200 && token.statusCode != 304) {
             return;
         }
         const projects = await getProjects();
 
-        res.json(projects);
+        return res.status(200).json(projects);
     } catch (error) {
         res.status(500).send();
     }

@@ -33,7 +33,7 @@ function DeveloperAddDialog({open, onClose, GetDevelopers}) {
     const [devs,setDevs] = useState([]);
     const params = useParams();
 
-    const getDevs = () => {
+     const getDevs = () => {
         fetch('http://localhost:8080/api/project/' + params.projectID + '/availableDevelopers',{
             method:'GET',
             headers:{
@@ -71,6 +71,7 @@ function DeveloperAddDialog({open, onClose, GetDevelopers}) {
                 // console.log(data);
                 onClose();
                 GetDevelopers();
+                getDevs()
             }).catch(data => {
             // console.log(data);
         })

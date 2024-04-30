@@ -24,11 +24,13 @@ async function getAvailableDevelopersByProjectId(projectId) {
     const projectDevelopers = await projectDeveloperSchema.find({project_id: projectId});
     const developers = await developerSchema.find({});
     const availableDevelopers = [];
-
+    // console.log(developers);
     for (const developer of developers) {
         let isAvailable = true;
+        // console.log('developer',developer._id);
         for (const projectDeveloper of projectDevelopers) {
-            if (projectDeveloper.developer_id == developer._id) {
+            // console.log(projectDeveloper.developer_id);
+            if (projectDeveloper.developer_id.equals(developer._id)) {
                 isAvailable = false;
                 break;
             }

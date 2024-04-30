@@ -1,11 +1,11 @@
 import './App.css';
-import React, {useEffect,useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Container, AppBar, Toolbar, Typography, ThemeProvider, createTheme, Button, IconButton} from '@mui/material';
 import {huHU as hu} from '@mui/material/locale';
 import {huHU as hu2} from '@mui/x-data-grid/locales';
 import {huHU as hu3} from '@mui/x-date-pickers/locales';
 // import ws from "./ws/ws";
-import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import {createBrowserRouter, redirect, RouterProvider} from 'react-router-dom';
 import HouseIcon from '@mui/icons-material/House';
 
 import Projects from './templates/Projects';
@@ -27,42 +27,46 @@ const theme = createTheme(
     hu3,
 );
 
-export function checkLoggedIn(){
-    const token = localStorage.getItem('token');
-    if(token == undefined || decodeToken(token).user.email == 'Guest'){
-        return false;
-    }
-    return true;
-}
-
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     useEffect(() => {
-        CheckToken();
-        // console.log(decodeToken(token).user.email);
-        setLoggedIn(checkLoggedIn());
+        CheckToken().then(data => {
+            // console.log(data);
+            if (data.msg === 'Token is valid') {
+                if (data.user.email === 'Guest')
+                    setLoggedIn(false);
+                else
+                    setLoggedIn(true);
+
+            } else {
+                console.log('whyyyyyyyyyyyyyyyyyyyyyyy')
+                localStorage.removeItem('token');
+                router.navigate('/login');
+            }
+        });
+        // console.log(localStorage.getItem('token'));
     }, []);
 
-    const CheckToken = () =>{
-        const token = localStorage.getItem('token');
-        fetch('http://localhost:8080/api/verify', {
-            method: 'GET',
-            headers: {
-                'Authorization': token
-            }
-        }).then(response => response.json())
-            .then(data => {
-                // console.log(data.statusCode);
-                // console.log(response);
-                // console.log(data);
-                // console.log(data.statusCode);
-                if (data.statusCode != 200) {
-                    router.navigate('/login');
-                    localStorage.removeItem('token');
+    const CheckToken = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            return await fetch('http://localhost:8080/api/verify', {
+                method: 'GET',
+                headers: {
+                    'Authorization': token
                 }
-            }).catch(err => {
-                console.error(err);
-        });
+            }).then( response => {
+
+            if (!response.ok) {
+                return false;
+            }
+            const data = response.json();
+            return data;
+            })
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
     }
 
     const router = createBrowserRouter([
@@ -84,20 +88,22 @@ function App() {
     return (
         <div className="App">
             <ThemeProvider theme={theme}>
-                <AppBar position={"sticky"} sx={{marginBottom:'24px'}}>
+                <AppBar position={"sticky"} sx={{marginBottom: '24px'}}>
                     <Toolbar>
-                        <IconButton
-                            size={"large"}
-                            edge={"start"}
-                            aria-label={"Projects"}
-                            color={"inherit"}
-                            onClick={() => router.navigate('/')}
-                        >
-                            <HouseIcon/>
-                        </IconButton>
+                        {loggedIn ?
+                            <IconButton
+                                size={"large"}
+                                edge={"start"}
+                                aria-label={"Projects"}
+                                color={"inherit"}
+                                onClick={() => router.navigate('/')}
+                            ><HouseIcon/>
+                            </IconButton> : null
+                        }
                         <Typography variant={"h6"} component={'div'}>Redmine</Typography>
                         {!loggedIn ?
-                        <Button color={"inherit"} sx={{ml: 'auto'}} onClick={() => router.navigate('/login')}>Login</Button>
+                            <Button color={"inherit"} sx={{ml: 'auto'}}
+                                    onClick={() => router.navigate('/login')}>Login</Button>
                             :
                             <Button color={"inherit"} sx={{ml: 'auto'}} onClick={() => {
                                 localStorage.removeItem('token');
@@ -108,7 +114,7 @@ function App() {
                     </Toolbar>
                 </AppBar>
                 <Container>
-                    <RouterProvider router={router} />
+                    <RouterProvider router={router}/>
                 </Container>
             </ThemeProvider>
         </div>

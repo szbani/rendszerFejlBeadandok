@@ -29,10 +29,15 @@ export default function Login({setLoggedIn}) {
             })
         }).then(response => response.json())
             .then(data => {
-                // console.log(data);
-                localStorage.setItem('token', data.token);
-                navigate('/');
-                setLoggedIn(true);
+                console.log('login',data);
+                if (data.token.statusCode == 200) {
+                    localStorage.setItem('token', data.token.token);
+                    navigate('/');
+                    setLoggedIn(true);
+                }else {
+                    console.log('Auth Failed');
+                }
+
                 // console.log(decodeToken(data.token).user.email);
             }).catch(err => {
             console.error(err);
@@ -50,7 +55,7 @@ export default function Login({setLoggedIn}) {
         }).then(response => response.json())
             .then(data => {
                 // console.log(data);
-                localStorage.setItem('token', data.token);
+                localStorage.setItem('token', data.token.token);
                 navigate('/');
                 // console.log(decodeToken(data.token).user.email);
             }).catch(err => {
@@ -83,7 +88,7 @@ export default function Login({setLoggedIn}) {
                 <Box>
                     <TextField label={"Email"} variant={"outlined"} sx={{mr: 3, mb: 3}}
                                onChange={handleUsernameChange}/>
-                    <TextField label={"Jelszó"} variant={"outlined"} sx={{mb: 3}} onChange={handlePasswordChange}/>
+                    <TextField label={"Jelszó"} type={"password"} variant={"outlined"} sx={{mb: 3}} onChange={handlePasswordChange}/>
 
                 </Box>
                 <Grid>
