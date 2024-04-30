@@ -52,6 +52,12 @@ function AddProjectDialog({open, onClose, getProjects}) {
         });
     }
 
+    const clearForm = () => {
+        setProjectName("");
+        setProjectType("");
+        setProjectDesc("");
+    }
+
     useEffect(() => {
         getProjectTypes();
     }, []);
@@ -74,6 +80,7 @@ function AddProjectDialog({open, onClose, getProjects}) {
             .then(data => {
                 console.log(data);
                 onClose();
+                clearForm();
                 getProjects();
             }).catch(data => {
             console.log(data);

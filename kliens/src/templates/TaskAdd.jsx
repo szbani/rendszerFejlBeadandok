@@ -60,6 +60,13 @@ function TaskAddDialog({open, onClose, GetTasks}) {
         getManagers();
     }, []);
 
+    const clearForm = () => {
+        setTaskName("");
+        setTaskDescription("");
+        setTaskManager("");
+        setDeadline(null);
+    }
+
     const handleSubmit = () => {
         const projectID = params.projectID;
         // console.log("submit");
@@ -80,6 +87,7 @@ function TaskAddDialog({open, onClose, GetTasks}) {
             .then(data => {
                 // console.log(data);
                 onClose();
+                clearForm();
                 GetTasks();
             }).catch(data => {
             // console.log(data);

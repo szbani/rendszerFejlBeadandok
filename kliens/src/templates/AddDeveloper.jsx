@@ -49,6 +49,10 @@ function DeveloperAddDialog({open, onClose, GetDevelopers}) {
         });
     }
 
+    const clearForm = () => {
+        setDev('');
+    }
+
     useEffect(() => {
         getDevs();
     }, []);
@@ -70,6 +74,7 @@ function DeveloperAddDialog({open, onClose, GetDevelopers}) {
             .then(data => {
                 // console.log(data);
                 onClose();
+                clearForm();
                 GetDevelopers();
                 getDevs()
             }).catch(data => {
