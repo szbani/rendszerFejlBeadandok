@@ -5,14 +5,20 @@ import {DataGrid} from '@mui/x-data-grid'
 import {useNavigate} from "react-router-dom";
 import AddProjectButton from "./AddProject";
 
-
-function Projects() {
+function Projects({loggedIn}) {
     const [projects, setProjects] = useState([]);
     const getProjects = () => {
-        fetch('http://localhost:8080/api/projects')
+        fetch('http://localhost:8080/api/projects',
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('token')
+                }
+            })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 setProjects(data);
             }).catch(data => {
             setProjects([]);
@@ -22,14 +28,18 @@ function Projects() {
     const navigate = useNavigate();
 
     const DeleteProject = (ProjectID) => {
-        fetch('http://localhost:8080/api/project/'+ProjectID, {
-            method:'DELETE'
+        fetch('http://localhost:8080/api/project/' + ProjectID, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            }
         }).then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 getProjects();
-            }).catch(data =>{
-                getProjects();
+            }).catch(data => {
+            getProjects();
         });
     }
 
@@ -41,13 +51,16 @@ function Projects() {
         <div>
             <Typography align={"left"} variant={"h4"}>Projektek</Typography>
             <Box justifyContent={"flex-end"} display={"flex"}>
-                <AddProjectButton getProjects={getProjects}/>
-                <Button variant={"outlined"} onClick={getProjects} sx={{mb: 1}}>Refresh projects</Button>
+                {loggedIn ? <AddProjectButton getProjects={getProjects}/> : null}
+                <Button variant={"outlined"} onClick={getProjects} sx={{mb: 1}}>Frissítés</Button>
             </Box>
             <Typography>Kattints duplán a projektre a feladatokért</Typography>
             {projects.length > 0 ?
                 <DataGrid
                     rows={projects}
+                    pageSizeOptions={[5, 10, 20]}
+                    initialState={{pagination: { paginationModel: {pageSize: 5, page: 0}}}}
+                    autoHeight={true}
                     columns={[
                         // {field: '_id', minWidth: 150, flex: 0.5},
                         {field: 'name', headerName: "Projekt", minWidth: 150, flex: 0.5},
@@ -65,10 +78,11 @@ function Projects() {
                             }
                         }
                     ]}
+                    columnVisibilityModel={{delete: loggedIn}}
                     getRowId={(row) => row._id}
                     onRowDoubleClick={(row) => {
                         // console.log(row);
-                        navigate('/project/' + row.row._id + '/tasks');
+                        navigate('/project/' + row.row._id);
                     }}
                 ></DataGrid>
                 : <p>'No projects'</p>

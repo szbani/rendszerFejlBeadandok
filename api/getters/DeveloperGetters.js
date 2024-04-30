@@ -20,7 +20,31 @@ async function getDevelopersByProjectId(projectId) {
     return developers;
 }
 
+async function getAvailableDevelopersByProjectId(projectId) {
+    const projectDevelopers = await projectDeveloperSchema.find({project_id: projectId});
+    const developers = await developerSchema.find({});
+    const availableDevelopers = [];
+    // console.log(developers);
+    for (const developer of developers) {
+        let isAvailable = true;
+        // console.log('developer',developer._id);
+        for (const projectDeveloper of projectDevelopers) {
+            // console.log(projectDeveloper.developer_id);
+            if (projectDeveloper.developer_id.equals(developer._id)) {
+                isAvailable = false;
+                break;
+            }
+        }
+        if (isAvailable) {
+            availableDevelopers.push(developer);
+        }
+    }
+    return availableDevelopers;
+
+}
+
 module.exports = {
     getDevelopers,
-    getDevelopersByProjectId
+    getDevelopersByProjectId,
+    getAvailableDevelopersByProjectId
 }

@@ -7,7 +7,7 @@ import {ArrowBack} from "@mui/icons-material";
 import TaskAddButton from "./TaskAdd";
 import {useNavigate} from "react-router-dom";
 
-function Tasks() {
+function Tasks({loggedIn}) {
     const [tasks, setTasks] = React.useState([]);
     const params = useParams();
     const [projectName, setProjectName] = React.useState('');
@@ -40,10 +40,14 @@ function Tasks() {
     const DeleteTask = (taskID) => {
         console.log(taskID);
         fetch('http://localhost:8080/api/project/' + params.projectID + '/task/' + taskID, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            }
         }).then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 GetTasks();
             }).catch(data => {
             GetTasks();
@@ -53,7 +57,12 @@ function Tasks() {
     const GetTasks = () => {
         const projectID = params.projectID;
         if (projectID != undefined) {
-            fetch('http://localhost:8080/api/project/' + projectID + '/tasks')
+            fetch('http://localhost:8080/api/project/' + projectID + '/tasks',{
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('token')
+                }
+            })
                 .then(response => response.json())
                 .then(data => {
                     // console.log(data);
@@ -69,10 +78,15 @@ function Tasks() {
     const GetProjectName = () => {
         const projectID = params.projectID;
         if (projectID != undefined) {
-            fetch('http://localhost:8080/api/project/' + projectID)
+            fetch('http://localhost:8080/api/project/' + projectID,{
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('token')
+                }
+            })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
+                    // console.log(data);
                     setProjectName(data.name);
                 }).catch(data => {
                 setProjectName('');
@@ -93,9 +107,10 @@ function Tasks() {
             <Grid container spacing={2}>
                 <Grid display={"flex"} justifyContent={"flex-start"} item xs={6}>
                     <BackToProjectsButton/>
+                    <Typography variant={"h5"}>Feladatok</Typography>
                 </Grid>
                 <Grid display={"flex"} justifyContent={"flex-end"} item xs={6}>
-                    <TaskAddButton GetTasks={GetTasks}/>
+                    {loggedIn ? <TaskAddButton GetTasks={GetTasks}/> : null}
                     <TaskRefreshButton/>
                 </Grid>
             </Grid>
@@ -114,20 +129,22 @@ function Tasks() {
                                 minWidth: 150,
                                 flex: 0.5
                             },
-                            {field: 'project', headerName: 'Projekt', minWidth: 150, flex: 0.5},
-                            {field: 'user', headerName: 'Manager', flex: 0.5},
-                            {field: 'deadline', headerName: 'Határidő', flex: 0.5},
+                            {field: 'project', headerName: 'Projekt', minWidth: 150, flex: 0.5},,
+                            {field: 'description', headerName: 'Leírás', flex: 0.5},
+                            {field: 'user', headerName: 'Manager', flex: 0.4},
+                            {field: 'deadline', headerName: 'Határidő', flex: 0.3},
                             {
                                 field: 'delete',
                                 headerName: 'Törlés',
                                 sortable: false,
-                                flex: 0.4,
+                                flex: 0.3,
                                 renderCell: (params) => {
                                     return <Button variant={"outlined"}
                                                    onClick={() => DeleteTask(params.row._id)}>Törlés</Button>
                                 }
                             }
                         ]}
+                        columnVisibilityModel={{delete: loggedIn}}
                         getRowId={(row) => row._id}
 
                     ></DataGrid>

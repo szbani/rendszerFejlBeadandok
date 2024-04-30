@@ -3,14 +3,12 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle, FormControl, Grid, MenuItem,
-    Select,
-    TextField, Typography
+    TextField
 } from "@mui/material";
 import {useEffect, useState} from "react";
 
-export default function AddProjectButton(getProjects) {
+export default function AddProjectButton({getProjects}) {
     const [open, setOpen] = useState(false);
     const handleclose = () => {
         setOpen(false);
@@ -36,20 +34,33 @@ function AddProjectDialog({open, onClose, getProjects}) {
     const [project_types, setTypeArray] = useState([]);
 
     const getProjectTypes = () => {
-        fetch('http://localhost:8080/api/projecttypes')
+        fetch('http://localhost:8080/api/projecttypes', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            }
+        })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
+                // console.log
                 setTypeArray(data);
             }).catch(data => {
-                console.log("types received");
+            // console.log("types received");
             setTypeArray([]);
         });
     }
 
+    const clearForm = () => {
+        setProjectName("");
+        setProjectType("");
+        setProjectDesc("");
+    }
+
     useEffect(() => {
         getProjectTypes();
-    },[]);
+    }, []);
 
     const handleSubmit = () => {
         console.log("submit");
@@ -61,13 +72,15 @@ function AddProjectDialog({open, onClose, getProjects}) {
         fetch('http://localhost:8080/api/project/', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
             },
             body: JSON.stringify(formData)
         }).then(response => response.json())
             .then(data => {
                 console.log(data);
                 onClose();
+                clearForm();
                 getProjects();
             }).catch(data => {
             console.log(data);
@@ -90,30 +103,34 @@ function AddProjectDialog({open, onClose, getProjects}) {
 
     return (
         <Dialog fullWidth maxWidth={"sm"} open={open} onClose={onClose}>
-            <FormControl marginNormal>
+            { project_types.length > 0 ?
+            <FormControl>
                 <DialogTitle>Projekt hozzáadása</DialogTitle>
                 <DialogContent>
-                    <TextField sx={{marginTop:"12px"}} label={"Projekt neve"} value={projectName} onChange={handleProjectNameChange} fullWidth/>
-                    <TextField sx={{marginY:"12px"}} label={"Projekt leírása"} value={projectDesc} onChange={handleProjectDescriptionChange}
+                    <TextField sx={{marginTop: "12px"}} label={"Projekt neve"} value={projectName}
+                               onChange={handleProjectNameChange} fullWidth/>
+                    <TextField sx={{marginY: "12px"}} label={"Projekt leírása"} value={projectDesc}
+                               onChange={handleProjectDescriptionChange}
                                fullWidth/>
-                    <Grid   container spacing={2}>
+                    <Grid container spacing={2}>
                         <Grid item xs={7}>
-                <TextField
-                    id="ProjectType"
-                    value={projectType}
-                    label="Type"
-                    onChange={handleProjectTypeChange}
-                    select
-                    fullWidth
-                >
-                    <MenuItem value="" disabled>
-                        Válassz Projekt típust
-                    </MenuItem>
-                    {project_types.map((projectType) => {
-                        return <MenuItem key={projectType._id} value={projectType._id}>{projectType.name}</MenuItem>
-                        }
-                    )}
-                </TextField>
+                            <TextField
+                                id="ProjectType"
+                                value={projectType}
+                                label="Type"
+                                onChange={handleProjectTypeChange}
+                                select
+                                fullWidth
+                            >
+                                <MenuItem value="" disabled>
+                                    Válassz Projekt típust
+                                </MenuItem>
+                                {project_types.map((projectType) => {
+                                        return <MenuItem key={projectType._id}
+                                                         value={projectType._id}>{projectType.name}</MenuItem>
+                                    }
+                                )}
+                            </TextField>
                         </Grid>
                     </Grid>
 
@@ -122,7 +139,7 @@ function AddProjectDialog({open, onClose, getProjects}) {
                     <Button onClick={onClose}>Mégse</Button>
                     <Button onClick={handleSubmit}>Hozzáadás</Button>
                 </DialogActions>
-            </FormControl>
+            </FormControl>: null}
         </Dialog>
     )
 }
