@@ -13,6 +13,7 @@ import Tasks from './templates/Tasks';
 import Developers from './templates/Developers';
 import Login from "./templates/Login";
 import {Socketcontext} from "./ws/ws";
+import DeadlineAlert from "./templates/DeadlineAlert";
 
 const theme = createTheme(
     {
@@ -96,7 +97,7 @@ const App = () => {
         },
         {
             path: '/login',
-            element: <Login setLoggedIn={setLoggedIn} getDeadlines={getDeadLines}/>
+            element: <Login setLoggedIn={setLoggedIn} getDeadlines={getDeadLines} />
         }
 
     ]);
@@ -133,9 +134,10 @@ const App = () => {
                     }
                 </Toolbar>
             </AppBar>
-            <Container>
-                <RouterProvider router={router}/>
-            </Container>
+                <Container>
+                    <RouterProvider router={router}/>
+                </Container>
+            <DeadlineAlert message={3} />
         </ThemeProvider>
     );
 }

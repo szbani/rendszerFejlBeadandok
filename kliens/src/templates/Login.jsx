@@ -34,7 +34,7 @@ export default function Login({setLoggedIn,getDeadlines}) {
                     navigate('/');
                     getDeadlines(username);
                     setLoggedIn(true);
-                }else {
+                } else {
                     console.log('Auth Failed');
                 }
                 // console.log(decodeToken(data.token).user.email);
@@ -65,25 +65,27 @@ export default function Login({setLoggedIn,getDeadlines}) {
     }
 
     return (
-        <div>
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
             <FormControl>
-                <Typography variant={"h4"} marginTop={"24px"} marginBottom={"24px"}>Bejelentkezés</Typography>
-                <Box>
-                    <TextField label={"Email"} variant={"outlined"} sx={{mr: 3, mb: 3}}
-                               onChange={handleUsernameChange}/>
-                    <TextField label={"Jelszó"} type={"password"} variant={"outlined"} sx={{mb: 3}} onChange={handlePasswordChange}/>
+                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                    <Typography variant={"h4"} marginTop={"24px"} marginBottom={"24px"}>Bejelentkezés</Typography>
+                    <Box>
+                        <TextField label={"Email"} variant={"outlined"} sx={{mr: 3, mb: 3}}
+                                   onChange={handleUsernameChange}/>
+                        <TextField label={"Jelszó"} type={"password"} variant={"outlined"} sx={{mb: 3}}
+                                   onChange={handlePasswordChange}/>
 
-                </Box>
-                <Grid>
-                    <Button variant={"contained"} sx={{maxWidth: '200px', width: 'min-content'}}
-                            onClick={handleSubmit}>Bejelentkezés</Button>
-                </Grid>
-                {/*<Button variant={"contained"} onClick={verifyTest}>Verify</Button>*/}
-                <Grid marginTop={2}>
-                    <Button variant={"contained"} sx={{maxWidth: '200px', width: 'min-content'}}
-                            onClick={handleGuest}>Vendég</Button>
-                </Grid>
-
+                    </Box>
+                    <Grid>
+                        <Button variant={"contained"} sx={{maxWidth: '200px', width: 'min-content'}}
+                                onClick={handleSubmit}>Bejelentkezés</Button>
+                    </Grid>
+                    {/*<Button variant={"contained"} onClick={verifyTest}>Verify</Button>*/}
+                    <Grid marginTop={2}>
+                        <Button variant={"contained"} sx={{maxWidth: '200px', width: 'min-content'}}
+                                onClick={handleGuest}>Vendég</Button>
+                    </Grid>
+                </div>
             </FormControl>
         </div>
     )
