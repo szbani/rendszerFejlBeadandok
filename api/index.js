@@ -3,10 +3,10 @@ const express = require('express');
 const getters = require('./express/exGetters');
 const deletes = require('./express/exDeletes');
 const uploads = require('./express/uploadFile');
-const updates = require('./express/exUpdates');
-const {router} = require('./auth/Authorization')
+const {router} = require('./auth/Authorization');
+const http = require('http');
 
-// const createWebSocketServer = require('./websocket/ws');
+const createWebSocketServer = require('./websocket/ws');
 const {connectToDatabase} = require('./Mongo/MongoServer');
 connectToDatabase();
 
@@ -41,19 +41,12 @@ process.on('SIGINT', () => {
     process.exit();
 });
 
-
-// Initialize HTTP server
-// const server = http.createServer((req, res) => {
-//     res.writeHead(200, { 'Content-Type': 'text/plain' });
-//     res.end('Server is running');
-// });
-
-
-// Initialize WebSocket server
-// createWebSocketServer(server);
-
-// Start the server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
 });
+
+createWebSocketServer();
+
+// Start the server
+

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import {useParams} from "react-router-dom";
 
-export default function DeveloperAddButton({GetDevelopers}){
+export default function DeveloperAddButton({GetDevelopers,devs,getDevs}) {
     const [open, setOpen] = useState(false);
     const handleclose = () => {
         setOpen(false);
@@ -22,32 +22,17 @@ export default function DeveloperAddButton({GetDevelopers}){
     return (
         <div>
             <Button variant={"outlined"} onClick={handleOpen} sx={{mb: 3}}>Feladat hozzáadása</Button>
-            <DeveloperAddDialog open={open} onClose={handleclose} GetDevelopers={GetDevelopers}/>
+            <DeveloperAddDialog devs={devs} getDevs={getDevs} open={open} onClose={handleclose} GetDevelopers={GetDevelopers}/>
 
         </div>
     )
 }
 
-function DeveloperAddDialog({open, onClose, GetDevelopers}) {
-    const [dev,setDev] = useState('');
-    const [devs,setDevs] = useState([]);
+function DeveloperAddDialog({open, onClose, GetDevelopers,devs,getDevs}) {
+    const [dev, setDev] = useState('');
     const params = useParams();
 
-     const getDevs = () => {
-        fetch('http://localhost:8080/api/project/' + params.projectID + '/availableDevelopers',{
-            method:'GET',
-            headers:{
-                'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem('token')
-            }
-        }).then(response => response.json())
-            .then(data => {
-                console.log(data);
-                setDevs(data);
-            }).catch(data => {
-            setDevs([]);
-        });
-    }
+
 
     const clearForm = () => {
         setDev('');
@@ -83,7 +68,7 @@ function DeveloperAddDialog({open, onClose, GetDevelopers}) {
         // console.log(formData);
     }
 
-    const handleDeveloperChange = (e) =>{
+    const handleDeveloperChange = (e) => {
         setDev(e.target.value);
     }
 

@@ -1,71 +1,18 @@
-const WebSocket = require('ws');
+const io = require('socket.io-client');
 
-const ws = new WebSocket('ws://localhost:8080');
+const socket = io('http://localhost:8888');
 
-ws.onopen = async function () {
+socket.on('connect', () => {
     console.log('Connected');
-    // ws.send('Hello Server');
-    ws.send(JSON.stringify(
-        {
-            action: 'AUTH',
-            email: 'hujeno@gmail.com',
-            password: 'password'
-        }
-    ));
+});
 
-    setTimeout(() => {
-        // ws.send(JSON.stringify(
-        //     {
-        //         action: 'UPLOAD',
-        //         type: 'addTask',
-        //         name: 'task test',
-        //         project_id: '65f3b74b77df5262b3453221',
-        //         user_id: '65f3acb946a8a82e961b3fb9',
-        //         deadline: '2025-06-25',
-        //     }));
-        // ws.send(JSON.stringify(
-        //     {
-        //         _id: '65fb4f8762c10f7c88f40f9c',
-        //         action: 'UPDATE',
-        //         type: 'updateTask',
-        //         name: 'task test updatedasd',
-        //         project_id: '65f3b74b77df5262b3453221',
-        //         user_id: '65f3acb946a8a82e961b3fb9',
-        //         deadline: '2025-07-25',
-        //     }));
-        // ws.send(JSON.stringify(
-        //     {
-        //         action: 'DELETE',
-        //         type: 'deleteTask',
-        //         _id: '65fb4f8762c10f7c88f40f9c'
-        //     }));
-    //      ws.send(JSON.stringify(
-    //         {
-    //             action: 'GET',
-    //             type: 'getProjects',
-    //         }));
-    //     ws.send(JSON.stringify(
-    //         {
-    //             action: 'UPLOAD',
-    //             type: 'addManager',
-    //             name: 'B.Ödön',
-    //             email: 'bodon@gmail.com',
-    //             password: 'password'
-    //         }));
-    },5000);
-}
+socket.on('connected', (data) => {
+    console.log(data);
+});
 
-ws.onmessage = function (e) {
-    console.log('Received: ' + e.data);
-}
+socket.on('message', (data) => {
+    console.log(data);
+});
 
-ws.onclose = function () {
-    console.log('Disconnected');
-}
-
-ws.onerror = function (e) {
-    console.log('Error: ' + e.data);
-}
-
-
+socket.emit('getDeadLine', '')
 

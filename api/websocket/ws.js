@@ -1,66 +1,44 @@
-const Websocket = require('api/websocket/ws');
-const wsGetters = require('./WsGetters');
-const wsDeletes = require('./WsDeletes');
-const wsAdd = require('./WsAdd');
-const wsUpdate = require('./wsUpdate');
+const {Server} = require("socket.io");
+const {getTasksByManagerWithDeadlineInOneWeek} = require("../getters/TaskGetters");
 
-const authenticate = require('./Auth');
-function createWebSocketServer(server) {
-    const ws = new Websocket.Server({server});
 
-    ws.on('connection', function connection(ws) {
-        console.log('Client connected');
-        let isAuth = true;
-        ws.send(JSON.stringify({message: 'Connected'}));
-        ws.onmessage = function (message) {
-            console.log('Received: ' + message.data);
-            let jsonMessage;
-            try {
-                jsonMessage = JSON.parse(message.data);
-            } catch (e) {
-                console.error('Error parsing JSON: ' + e);
-                ws.send(JSON.stringify({error: 'Only JSON is allowed'}));
-                return;
-            }
-            if (!isAuth) {
-                if (jsonMessage.action == 'AUTH') {
-                    authenticate.auth(jsonMessage).then((result) => {
-                        if (result) {
-                            isAuth = true;
-                            ws.send(JSON.stringify({message: 'Authenticated'}));
-                        } else {
-                            ws.send(JSON.stringify({error: 'Invalid email or password'}));
-                        }
-                    });
-                }else{
-                    ws.send(JSON.stringify({error: 'Not authenticated'}));
-                }
-            } else {
-                switch (jsonMessage.action) {
-                    case "GET":
-                        wsGetters(jsonMessage, ws);
-                        break;
-                    case "DELETE":
-                        wsDeletes(jsonMessage, ws);
-                        break;
-                    case "UPLOAD":
-                        wsAdd(jsonMessage,ws)
-                        break;
-                    case "UPDATE":
-                        wsUpdate(jsonMessage,ws)
-                        break;
-                    default:
-                        ws.send(JSON.stringify({error: 'Unknown action'}));
-                }
-            }
+function createWebSocketServer() {
+
+    const io = new Server(8888, {
+        cors: {
+            origin: '*',
         }
-        ws.on('close', function close() {
-            console.log('Client disconnected');
-        });
-
     });
 
-    return ws;
+    io.on('connection', (socket) => {
+        console.log('New client connected');
+        socket.emit('connected', 'Welcome to the chat!');
+
+        socket.on('disconnect', () => {
+            console.log('Client disconnected');
+        });
+        socket.on('message', (data) => {
+            console.log('Message received', data);
+            socket.emit('message', 'Message received');
+        });
+        socket.on('getdeadlines', async (data) => {
+            console.log('Getting deadlines for', data);
+            try {
+                const deadlines = await getTasksByManagerWithDeadlineInOneWeek(data);
+
+                // console.log(deadlines.length);
+                socket.emit('deadlines', deadlines.length);
+            }catch (err){
+                console.log(data,err)
+            }
+        });
+        socket.on('disconnect', () => {
+            console.log('Client disconnected');
+            socket.disconnect(0);
+        });
+    });
+    console.log('WebSocket server is running on port 8888')
+    return io;
 }
 
 module.exports = createWebSocketServer;

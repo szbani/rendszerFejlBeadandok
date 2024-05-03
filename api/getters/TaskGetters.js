@@ -1,4 +1,5 @@
 const taskSchema = require("../../schemas/Tasks");
+const managerSchema = require("../../schemas/Managers");
 
 async function getTasks() {
     try {
@@ -43,7 +44,13 @@ async function getTasksByManagerWithDeadlineInOneWeek(managerId) {
     let date = new Date(currDate);
     date.setDate(currDate.getDate() + 7);
     console.log(date);
-    return taskSchema.find({user_id: managerId, deadline: {$lte: date}});
+
+    return managerSchema.find({email: managerId})
+        .then(manager => {
+            return manager[0]._id;
+        }).then( managerId => {
+            return taskSchema.find({user_id: managerId, deadline: {$lte: date}});
+        });
 }
 
 module.exports = {

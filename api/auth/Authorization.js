@@ -61,6 +61,7 @@ const createToken = async (req) => {
         if (req.body.username != undefined && req.body.password != undefined) {
             console.log(req.body.username, req.body.password);
             user = await managerSchema.findOne({email: req.body.username, password: req.body.password});
+            user.password = undefined;
             if (!user) {
                 throw new Error('User not found or password is incorrect!');
             }

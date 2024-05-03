@@ -1,9 +1,8 @@
 import {Box, Button, FormControl, Grid, TextField, Typography} from "@mui/material";
-import {useState} from "react";
-import {decodeToken} from "react-jwt";
+import {useContext, useState} from "react";
 import {useNavigate} from "react-router-dom";
 
-export default function Login({setLoggedIn}) {
+export default function Login({setLoggedIn,handleOpen,handleClose}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -17,7 +16,7 @@ export default function Login({setLoggedIn}) {
     }
 
     const handleSubmit = () => {
-        console.log('submit');
+        // console.log('submit');
         fetch('http://localhost:8080/api/login', {
             method: 'POST',
             headers: {
@@ -29,15 +28,15 @@ export default function Login({setLoggedIn}) {
             })
         }).then(response => response.json())
             .then(data => {
-                console.log('login',data);
+                // console.log('login',data);
                 if (data.token.statusCode == 200) {
                     localStorage.setItem('token', data.token.token);
                     navigate('/');
+                    handleOpen();
                     setLoggedIn(true);
                 }else {
                     console.log('Auth Failed');
                 }
-
                 // console.log(decodeToken(data.token).user.email);
             }).catch(err => {
             console.error(err);
@@ -56,6 +55,7 @@ export default function Login({setLoggedIn}) {
             .then(data => {
                 // console.log(data);
                 localStorage.setItem('token', data.token.token);
+                handleClose();
                 navigate('/');
                 // console.log(decodeToken(data.token).user.email);
             }).catch(err => {
@@ -63,22 +63,6 @@ export default function Login({setLoggedIn}) {
         }).catch(err => {
             console.error(err)
         });
-    }
-
-    const verifyTest = () => {
-        fetch('http://localhost:8080/api/verify', {
-            method: 'GET',
-            headers: {
-                'Authorization': localStorage.getItem('token')
-            }
-        }).then(response => response.json())
-            .then(data => {
-                console.log(data);
-            }).catch(err => {
-            console.error(err);
-        });
-        console.log(decodeToken(localStorage.getItem('token')));
-
     }
 
     return (
