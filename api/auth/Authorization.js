@@ -18,17 +18,17 @@ const verifyTokenManager = (req, res, next) => {
         req.user = decoded.user;
         const time = new Date().getTime() / 1000;
         if (decoded.exp < time) {
-            res.status(401).send({msg: 'Token has expired',statusCode: 401});
+            res.status(401).send({msg: 'Token has expired', statusCode: 401});
             return {statusCode: 401};
         }
         if (req.user.email === 'Guest') {
-            res.status(401).send({msg: 'Unauthorized',statusCode: 401});
+            res.status(401).send({msg: 'Unauthorized', statusCode: 401});
             return {statusCode: 401};
         }
-        return {statusCode: 200,decoded};
+        return {statusCode: 200, decoded};
     } catch (err) {
         console.error("Invalid token: " + err);
-        res.status(401).send({msg: 'Invalid Token',statusCode: 401});
+        res.status(401).send({msg: 'Invalid Token', statusCode: 401});
         return {statusCode: 401};
     }
 }
@@ -36,22 +36,22 @@ const verifyTokenManager = (req, res, next) => {
 const verifyToken = (req, res) => {
     const token = req.headers['authorization'];
     if (!token) {
-        res.status(403).send({ msg: 'A token is required for authentication' });
-        return { statusCode: 403 };
+        res.status(403).send({msg: 'A token is required for authentication'});
+        return {statusCode: 403};
     }
     try {
         const decoded = jwt.verify(token, secret);
         req.user = decoded.user;
         const time = new Date().getTime() / 1000;
         if (decoded.exp < time) {
-            res.status(401).send({ msg: 'Token has expired', statusCode: 401 });
-            return { statusCode: 401 };
+            res.status(401).send({msg: 'Token has expired', statusCode: 401});
+            return {statusCode: 401};
         }
-        return { statusCode: 200, decoded };
+        return {statusCode: 200, decoded};
     } catch (err) {
         console.error("Invalid token: " + err);
-        res.status(401).send({ msg: 'Invalid Token', statusCode: 401 });
-        return { statusCode: 401 };
+        res.status(401).send({msg: 'Invalid Token', statusCode: 401});
+        return {statusCode: 401};
     }
 };
 
@@ -71,10 +71,10 @@ const createToken = async (req) => {
             user.email = 'Guest';
         }
         const token = jwt.sign({user}, secret, {expiresIn: '1H'});
-        return {token,statusCode: 200};
+        return {token, statusCode: 200};
     } catch (err) {
         console.error("Auth Failed: " + err);
-        return {msg: 'Auth Failed',statusCode: 401};
+        return {msg: 'Auth Failed', statusCode: 401};
     }
 }
 
@@ -91,7 +91,7 @@ router.post('/login', async (req, res) => {
 router.get('/verify', async (req, res) => {
     const token = verifyToken(req, res);
     if (token.statusCode == 200) {
-        res.status(200).send({msg: 'Token is valid',user: token.decoded.user});
+        res.status(200).send({msg: 'Token is valid', user: token.decoded.user});
     }
 });
 

@@ -1,10 +1,19 @@
 import './App.css';
 import React, {useContext, useEffect, useState} from 'react';
-import {Container, AppBar, Toolbar, Typography, ThemeProvider, createTheme, Button, IconButton} from '@mui/material';
+import {
+    Container,
+    AppBar,
+    Toolbar,
+    Typography,
+    ThemeProvider,
+    createTheme,
+    Button,
+    IconButton,
+    Box
+} from '@mui/material';
 import {huHU as hu} from '@mui/material/locale';
 import {huHU as hu2} from '@mui/x-data-grid/locales';
 import {huHU as hu3} from '@mui/x-date-pickers/locales';
-// import ws from "./ws/ws";
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
 import HouseIcon from '@mui/icons-material/House';
 
@@ -30,38 +39,42 @@ const theme = createTheme(
 const App = () => {
     const {connected, getDeadLines, deadlines} = useContext(Socketcontext);
     const [loggedIn, setLoggedIn] = useState(false);
-    const [user, setUser] = useState({});
-    useEffect(() => {
-        if (user.email === undefined || user.email === '') {
-            console.log('asd2');
-            CheckToken().then(data => {
-                // console.log(data);
-                if (data.msg === 'Token is valid') {
-                    setUser(data.user);
-                    if (data.user.email === 'Guest') {
-                        setLoggedIn(false);
-                        // handleClose();
-                    } else {
-                        setLoggedIn(true);
-                        // handleOpen();
-                        getDeadLines(data.user.email);
-                    }
-                } else {
-                    localStorage.removeItem('token');
-                    router.navigate('/login');
-                }
-            })
-        }
-        // socket.connect();
-        // console.log(localStorage.getItem('token'));
-    }, []);
+    const [user, setUser] = useState({'email': ''});
 
     useEffect(() => {
-        // if (deadlines > 0) console.log('valtozott');
+        // console.log('asd2');
+        CheckToken().then(data => {
+            console.log(data);
+            if (data != false) {
+                setUser(data.user);
+                if (data.user.email === 'Guest') {
+                    setLoggedIn(false);
+                    // handleClose();
+                } else {
+                    setLoggedIn(true);
+                    // handleOpen();
+                    getDeadLines(data.user.email);
+                }
+            } else {
+                localStorage.removeItem('token');
+                // router.navigate('/login');
+            }
+        })
         if (connected && user.email != undefined && loggedIn) {
             getDeadLines(user.email);
         }
-    }, [connected,loggedIn]);
+    }, []);
+
+    useEffect(() => {
+        console.log(user.email, loggedIn);
+        // if (location !== '/login') {
+        if (user.email != 'Guest' && !loggedIn) {
+            router.navigate('/login');
+        } else {
+            console.log('asd');
+            router.navigate('/');
+        }
+    }, [user.email, loggedIn]);
 
     const CheckToken = async () => {
         try {
@@ -72,7 +85,6 @@ const App = () => {
                     'Authorization': token
                 }
             }).then(response => {
-
                 if (!response.ok) {
                     return false;
                 }
@@ -115,11 +127,21 @@ const App = () => {
                         ><HouseIcon/>
                         </IconButton> : null
                     }
-                    <Typography variant={"h6"} component={'div'}>Redmine</Typography>
+                    {user.email !== undefined ?
+                        <Typography variant={"h6"} component={'div'}>{user.name}</Typography>
+                        :
+                        <Typography variant={"h6"} component={'div'}>Redmine</Typography>
+                    }
+                    {loggedIn ?
+                        <Button color={"inherit"} variant={"h6"} sx={{ml: 'auto'}} >Saját feladatok</Button>
+                        :
+                        null
+                    }
                     {!loggedIn ?
                         <Button color={"inherit"} sx={{ml: 'auto'}}
                                 onClick={() => {
                                     router.navigate('/login');
+                                    localStorage.removeItem('token');
                                     setUser({});
                                 }}>Login</Button>
                         :
@@ -127,7 +149,6 @@ const App = () => {
                             localStorage.removeItem('token');
                             setLoggedIn(false);
                             setUser({});
-                            // handleClose();
                             router.navigate('/login');
                         }}>Logout</Button>
                     }
