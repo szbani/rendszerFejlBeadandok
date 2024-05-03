@@ -1,5 +1,5 @@
 import {Box, Button, FormControl, Grid, TextField, Typography} from "@mui/material";
-import {useContext, useState} from "react";
+import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 
 export default function Login({setLoggedIn,getDeadlines}) {
