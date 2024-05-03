@@ -28,7 +28,7 @@ const theme = createTheme(
 );
 
 const App = () => {
-    const {connected, getDeadLines, deadlines, handleClose, handleOpen} = useContext(Socketcontext);
+    const {connected, getDeadLines, deadlines} = useContext(Socketcontext);
     const [loggedIn, setLoggedIn] = useState(false);
     const [user, setUser] = useState({});
     useEffect(() => {
@@ -40,10 +40,10 @@ const App = () => {
                     setUser(data.user);
                     if (data.user.email === 'Guest') {
                         setLoggedIn(false);
-                        handleClose();
+                        // handleClose();
                     } else {
                         setLoggedIn(true);
-                        handleOpen();
+                        // handleOpen();
                         getDeadLines(data.user.email);
                     }
                 } else {
@@ -58,10 +58,10 @@ const App = () => {
 
     useEffect(() => {
         // if (deadlines > 0) console.log('valtozott');
-        if (connected && user.email != undefined) {
+        if (connected && user.email != undefined && loggedIn) {
             getDeadLines(user.email);
         }
-    }, [connected]);
+    }, [connected,loggedIn]);
 
     const CheckToken = async () => {
         try {
@@ -96,24 +96,16 @@ const App = () => {
         },
         {
             path: '/login',
-            element: <Login setLoggedIn={setLoggedIn} handleOpen={handleOpen} handleClose={handleClose}/>
+            element: <Login setLoggedIn={setLoggedIn} getDeadlines={getDeadLines}/>
         }
 
     ]);
-
-    // const websocketDisconnect = () => {
-    //     if (ws.readyState === WebSocket.CLOSED) {
-    //         console.log('Nincs kapcsolat a szerverrel.');
-    //         return;
-    //     }
-    //     ws.close();
-    // }
 
     return (
         <ThemeProvider theme={theme}>
             <AppBar position={"sticky"} sx={{marginBottom: '24px'}}>
                 <Toolbar>
-                    {loggedIn ?
+                    {user.email !== undefined ?
                         <IconButton
                             size={"large"}
                             edge={"start"}
@@ -126,13 +118,16 @@ const App = () => {
                     <Typography variant={"h6"} component={'div'}>Redmine</Typography>
                     {!loggedIn ?
                         <Button color={"inherit"} sx={{ml: 'auto'}}
-                                onClick={() => router.navigate('/login')}>Login</Button>
+                                onClick={() => {
+                                    router.navigate('/login');
+                                    setUser({});
+                                }}>Login</Button>
                         :
                         <Button color={"inherit"} sx={{ml: 'auto'}} onClick={() => {
                             localStorage.removeItem('token');
                             setLoggedIn(false);
                             setUser({});
-                            handleClose();
+                            // handleClose();
                             router.navigate('/login');
                         }}>Logout</Button>
                     }

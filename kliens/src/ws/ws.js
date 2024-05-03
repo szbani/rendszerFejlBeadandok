@@ -13,7 +13,7 @@ const SocketProvider = ({children}) => {
     useEffect(() => {
         const initSocket = async () => {
             const newSocket = io('http://localhost:8888', {
-                autoConnect: false,
+                autoConnect: true,
                 reconnection: true,
                 reconnectionAttempts: 10,
                 transports: ['websocket'],
