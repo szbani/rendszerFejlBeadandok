@@ -9,7 +9,6 @@ import {
     createTheme,
     Button,
     IconButton,
-    Box
 } from '@mui/material';
 import {huHU as hu} from '@mui/material/locale';
 import {huHU as hu2} from '@mui/x-data-grid/locales';
@@ -38,8 +37,8 @@ const theme = createTheme(
 );
 
 const App = () => {
-    const {connected, getDeadLines, deadlines} = useContext(Socketcontext);
-    const [loggedIn, setLoggedIn] = useState(false);
+    const {connected, getDeadLines, deadlines,setDeadlines} = useContext(Socketcontext);
+    const [loggedIn, setLoggedIn] = useState();
     const [user, setUser] = useState({'email': ''});
 
     useEffect(() => {
@@ -50,31 +49,28 @@ const App = () => {
                 setUser(data.user);
                 if (data.user.email === 'Guest') {
                     setLoggedIn(false);
-                    // handleClose();
                 } else {
                     setLoggedIn(true);
-                    // handleOpen();
-                    getDeadLines(data.user.email);
                 }
             } else {
                 localStorage.removeItem('token');
                 // router.navigate('/login');
             }
         })
-        if (connected && user.email != undefined && loggedIn) {
-            getDeadLines(user.email);
-        }
     }, []);
 
     useEffect(() => {
         console.log(user.email, loggedIn);
         // if (location !== '/login') {
-        if (user.email != 'Guest' && !loggedIn) {
+        if (user.email != 'Guest' && loggedIn == false) {
             router.navigate('/login');
-        } else {
-            console.log('asd');
-            router.navigate('/');
+        }else if (connected && user.email != undefined && loggedIn) {
+            getDeadLines(user._id);
         }
+        // else if {
+        //     console.log('asd');
+        //     router.navigate('/');
+        // }
     }, [user.email, loggedIn]);
 
     const CheckToken = async () => {
@@ -110,6 +106,14 @@ const App = () => {
         {
             path: '/login',
             element: <Login setLoggedIn={setLoggedIn} getDeadlines={getDeadLines} />
+        },
+        {
+            path: '/my/tasks',
+            element: <Tasks loggedIn={loggedIn} user={user}/>
+        },
+        {
+            path: '/my/tasks/deadlines',
+            element: <Tasks loggedIn={loggedIn} user={user} />
         }
 
     ]);
@@ -133,8 +137,9 @@ const App = () => {
                         :
                         <Typography variant={"h6"} component={'div'}>Redmine</Typography>
                     }
+                    <Button color={'inherit'} variant={'h6'} sx={{ml: 'auto'}} onClick={() => router.navigate('/')}>Projektek</Button>
                     {loggedIn ?
-                        <Button color={"inherit"} variant={"h6"} sx={{ml: 'auto'}} >Saját feladatok</Button>
+                        <Button color={"inherit"} variant={"h6"} onClick={() => router.navigate('/my/tasks')}>Saját feladatok</Button>
                         :
                         null
                     }
@@ -144,12 +149,14 @@ const App = () => {
                                     router.navigate('/login');
                                     localStorage.removeItem('token');
                                     setUser({});
+                                    setDeadlines(0);
                                 }}>Login</Button>
                         :
                         <Button color={"inherit"} sx={{ml: 'auto'}} onClick={() => {
                             localStorage.removeItem('token');
                             setLoggedIn(false);
                             setUser({});
+                            setDeadlines(0);
                             router.navigate('/login');
                         }}>Logout</Button>
                     }
@@ -158,7 +165,7 @@ const App = () => {
                 <Container>
                     <RouterProvider router={router}/>
                 </Container>
-            <DeadlineAlert message={3} />
+            <DeadlineAlert message={deadlines} />
         </ThemeProvider>
     );
 }

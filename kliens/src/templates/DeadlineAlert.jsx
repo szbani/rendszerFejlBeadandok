@@ -37,7 +37,7 @@ function DeadlineAlert({ message }) {
     return (
         <Snackbar
             open={open}
-            autoHideDuration={6000}
+            autoHideDuration={15000}
             onClose={handleClose}
             message={message + " feladatodnak közeleg a határideje!"}
             action={action}

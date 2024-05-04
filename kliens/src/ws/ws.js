@@ -67,7 +67,7 @@ const SocketProvider = ({children}) => {
 
 
     return (
-        <Socketcontext.Provider value={{socket, connected, deadlines, getDeadLines, handleClose, handleOpen}}>
+        <Socketcontext.Provider value={{socket, connected, deadlines, getDeadLines, setDeadlines}}>
             {isInitialized && children}
         </Socketcontext.Provider>
     );

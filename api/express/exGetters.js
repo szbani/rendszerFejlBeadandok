@@ -51,13 +51,13 @@ router.get('/manager/:id/tasks', async (req, res) => {
         return res.status(500).send();
     }
 });
-router.get('/manager/:email/deadlines', async (req, res) => {
+router.get('/manager/:id/deadlines', async (req, res) => {
     try {
         const token = verifyTokenManager(req, res);
         if (token.statusCode != 200 && token.statusCode != 304) {
             return;
         }
-        const managerID = req.params.email;
+        const managerID = req.params.id;
         const tasksWithDeadline = await getTasksByManagerWithDeadlineInOneWeek(managerID);
         res.json(tasksWithDeadline);
     } catch (error) {
