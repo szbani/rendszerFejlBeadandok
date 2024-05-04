@@ -5,7 +5,7 @@ import {DataGrid} from '@mui/x-data-grid'
 import {useNavigate} from "react-router-dom";
 import AddProjectButton from "./AddProject";
 
-function Projects({loggedIn}) {
+function Projects({loggedIn,deadlines}) {
     const [projects, setProjects] = useState([]);
     const getProjects = () => {
         fetch('http://localhost:8080/api/projects',

@@ -144,7 +144,6 @@ function TaskAddDialog({open, onClose, GetTasks}) {
                             </LocalizationProvider>
                         </Grid>
                     </Grid>
-                    {/*65fb2362534102d005ce0dcf*/}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={onClose}>Mégse</Button>

@@ -1,4 +1,5 @@
 const taskSchema = require("../../schemas/Tasks");
+const managerSchema = require("../../schemas/Managers");
 
 async function getTasks() {
     try {
@@ -35,7 +36,18 @@ async function getTaskByTaskId(taskId) {
 }
 
 async function getTasksByManagerId(managerId) {
-    return taskSchema.find({user_id: managerId});
+    const tasks = taskSchema.find({user_id: managerId})
+        .populate('project_id', 'name _id')
+        .exec();
+    return (await tasks).map(task => {
+        return {
+            _id: task._id,
+            name: task.name,
+            description: task.description,
+            deadline: task.deadline,
+            project: task.project_id.name
+        }
+    })
 }
 
 async function getTasksByManagerWithDeadlineInOneWeek(managerId) {
@@ -43,7 +55,8 @@ async function getTasksByManagerWithDeadlineInOneWeek(managerId) {
     let date = new Date(currDate);
     date.setDate(currDate.getDate() + 7);
     console.log(date);
-    return taskSchema.find({user_id: managerId, deadline: {$lte: date}});
+
+    return taskSchema.find({user_id: managerId, deadline: {$lt: date}});
 }
 
 module.exports = {

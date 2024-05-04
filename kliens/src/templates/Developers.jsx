@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {Button, Grid, Typography} from "@mui/material";
 import TaskAddButton from "./TaskAdd";
@@ -9,6 +9,7 @@ function Developers({loggedIn}) {
     const [developers, setDevelopers] = React.useState([]);
     const params = useParams();
     const [projectName, setProjectName] = React.useState('');
+    const [devs, setDevs] = useState([]);
     const navigate = useNavigate();
 
     const DeveloperRefreshButton = () => {
@@ -29,12 +30,30 @@ function Developers({loggedIn}) {
             },
         }).then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 GetDevelopers();
+                getDevs();
             }).catch(data => {
             GetDevelopers();
         });
     }
+
+    const getDevs = () => {
+        fetch('http://localhost:8080/api/project/' + params.projectID + '/availableDevelopers', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            }
+        }).then(response => response.json())
+            .then(data => {
+                // console.log(data);
+                setDevs(data);
+            }).catch(data => {
+            setDevs([]);
+        });
+    }
+
     const GetDevelopers = () =>{
         const projectID = params.projectID;
         if (projectID != undefined) {
@@ -47,7 +66,7 @@ function Developers({loggedIn}) {
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
+                    // console.log(data);
                     setDevelopers(data);
                     // setProjectName(data[0].project);
                 }).catch(data => {
@@ -68,7 +87,7 @@ function Developers({loggedIn}) {
                     <Typography  variant={"h5"} align={"left"}>Fejlesztők</Typography>
                 </Grid>
                 <Grid display={"flex"} justifyContent={"flex-end"} item xs={6}>
-                    {loggedIn ? <DeveloperAddButton GetDevelopers={GetDevelopers}/>: null}
+                    {loggedIn ? <DeveloperAddButton GetDevelopers={GetDevelopers} devs={devs} getDevs={getDevs}/>: null}
                     <DeveloperRefreshButton />
                 </Grid>
             </Grid>

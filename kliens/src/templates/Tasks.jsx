@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 // import ws from '../ws/ws';
 import {Button, Grid, IconButton, Typography} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid'
@@ -7,12 +7,26 @@ import {ArrowBack} from "@mui/icons-material";
 import TaskAddButton from "./TaskAdd";
 import {useNavigate} from "react-router-dom";
 
-function Tasks({loggedIn}) {
+function Tasks({loggedIn, user, _filter}) {
     const [tasks, setTasks] = React.useState([]);
     const params = useParams();
     const [projectName, setProjectName] = React.useState('');
     const navigate = useNavigate();
 
+    const addDays = (date, days) => {
+        const result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    };
+
+    const [filterModel, setFilterModel] = useState({
+        items: [{field: 'deadline', operator: 'onOrBefore', value: addDays(new Date(), 7)}],
+    });
+
+    let id;
+    if (user !== undefined) {
+        id = user._id;
+    }
     const TaskRefreshButton = () => {
         return (
             <div>
@@ -38,7 +52,7 @@ function Tasks({loggedIn}) {
     };
 
     const DeleteTask = (taskID) => {
-        console.log(taskID);
+        // console.log(taskID);
         fetch('http://localhost:8080/api/project/' + params.projectID + '/task/' + taskID, {
             method: 'DELETE',
             headers: {
@@ -55,9 +69,10 @@ function Tasks({loggedIn}) {
     }
 
     const GetTasks = () => {
+        // console.log(id)
         const projectID = params.projectID;
         if (projectID != undefined) {
-            fetch('http://localhost:8080/api/project/' + projectID + '/tasks',{
+            fetch('http://localhost:8080/api/project/' + projectID + '/tasks', {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': localStorage.getItem('token')
@@ -66,19 +81,42 @@ function Tasks({loggedIn}) {
                 .then(response => response.json())
                 .then(data => {
                     // console.log(data);
+                    data = data.map((task) => {
+                        task.deadline = new Date(task.deadline);
+                        // console.log(date,tasks.d)
+                        return task;
+                    });
                     setTasks(data);
-                    // setProjectName(data[0].project);
                 }).catch(data => {
                 setTasks([]);
             });
-
+        } else if (id != undefined) {
+            fetch('http://localhost:8080/api/manager/' + id + '/tasks', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': localStorage.getItem('token')
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // console.log(data);
+                    data = data.map((task) => {
+                        task.user = user.name;
+                        task.deadline = new Date(task.deadline);
+                        // console.log(date,tasks.d)
+                        return task;
+                    });
+                    setTasks(data);
+                }).catch(data => {
+                setTasks([]);
+            });
         }
     }
 
     const GetProjectName = () => {
         const projectID = params.projectID;
         if (projectID != undefined) {
-            fetch('http://localhost:8080/api/project/' + projectID,{
+            fetch('http://localhost:8080/api/project/' + projectID, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': localStorage.getItem('token')
@@ -99,18 +137,35 @@ function Tasks({loggedIn}) {
     useEffect(() => {
         GetTasks();
         GetProjectName();
-    }, []);
+
+    }, [id]);
+
+    useEffect(() => {
+        if (_filter) {
+            //setFilter();
+            setFilterModel({
+                items: [{field: 'deadline', operator: 'onOrBefore', value: addDays(new Date(), 7)}],
+            });
+        } else {
+            //setFilter(undefined);
+            setFilterModel({items: []});
+        }
+    }, [_filter]);
 
     return (
         <div>
-            <Typography align={"left"} variant={"h4"}>{projectName}</Typography>
+            {id == undefined ?
+                <Typography align={"left"} variant={"h4"}>{projectName}</Typography>
+                :
+                null
+            }
             <Grid container spacing={2}>
                 <Grid display={"flex"} justifyContent={"flex-start"} item xs={6}>
                     <BackToProjectsButton/>
                     <Typography variant={"h5"}>Feladatok</Typography>
                 </Grid>
                 <Grid display={"flex"} justifyContent={"flex-end"} item xs={6}>
-                    {loggedIn ? <TaskAddButton GetTasks={GetTasks}/> : null}
+                    {loggedIn && id == undefined ? <TaskAddButton GetTasks={GetTasks}/> : null}
                     <TaskRefreshButton/>
                 </Grid>
             </Grid>
@@ -129,10 +184,10 @@ function Tasks({loggedIn}) {
                                 minWidth: 150,
                                 flex: 0.5
                             },
-                            {field: 'project', headerName: 'Projekt', minWidth: 150, flex: 0.5},,
+                            {field: 'project', headerName: 'Projekt', minWidth: 150, flex: 0.5},
                             {field: 'description', headerName: 'Leírás', flex: 0.5},
                             {field: 'user', headerName: 'Manager', flex: 0.4},
-                            {field: 'deadline', headerName: 'Határidő', flex: 0.3},
+                            {field: 'deadline', headerName: 'Határidő', flex: 0.3, type: 'date'},
                             {
                                 field: 'delete',
                                 headerName: 'Törlés',
@@ -146,6 +201,8 @@ function Tasks({loggedIn}) {
                         ]}
                         columnVisibilityModel={{delete: loggedIn}}
                         getRowId={(row) => row._id}
+                        filterModel={filterModel}
+                        //onFilterModelChange={(newModel) => setFilterModel(newModel)}
 
                     ></DataGrid>
                     : <p>'No tasks'</p>
