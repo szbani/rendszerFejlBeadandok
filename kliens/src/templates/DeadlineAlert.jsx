@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Button from '@mui/material/Button';
 
-function DeadlineAlert({ message }) {
+function DeadlineAlert({ message, router }) {
     const [open, setOpen] = useState(false);
 
     const handleClose = (event, reason) => {
@@ -13,8 +13,8 @@ function DeadlineAlert({ message }) {
     };
 
     const handleJumpToDeadline = () => {
-        // Ide írd azt a logikát, amit szeretnél végrehajtani, amikor a felhasználó rákattint a gombra
         console.log('Ugrás a közelgő határidőhöz');
+        router.navigate('/my/tasks/deadlines');
     };
 
     const action = (

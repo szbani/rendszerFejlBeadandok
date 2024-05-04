@@ -111,11 +111,11 @@ const App = () => {
         },
         {
             path: '/my/tasks',
-            element: <Tasks loggedIn={loggedIn} user={user}/>
+            element: <Tasks loggedIn={loggedIn} _filter={false} user={user}/>
         },
         {
             path: '/my/tasks/deadlines',
-            element: <Tasks loggedIn={loggedIn} user={user} />
+            element: <Tasks loggedIn={loggedIn} _filter={true} user={user} />
         }
 
     ]);
@@ -167,7 +167,7 @@ const App = () => {
                 <Container>
                     <RouterProvider router={router}/>
                 </Container>
-            <DeadlineAlert message={deadlines} />
+            <DeadlineAlert router={router} message={deadlines} />
         </ThemeProvider>
     );
 }

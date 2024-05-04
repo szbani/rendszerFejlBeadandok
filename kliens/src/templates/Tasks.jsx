@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 // import ws from '../ws/ws';
 import {Button, Grid, IconButton, Typography} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid'
@@ -7,11 +7,23 @@ import {ArrowBack} from "@mui/icons-material";
 import TaskAddButton from "./TaskAdd";
 import {useNavigate} from "react-router-dom";
 
-function Tasks({loggedIn, user}) {
+function Tasks({loggedIn, user, _filter}) {
     const [tasks, setTasks] = React.useState([]);
+    const [filter, setFilter] = React.useState();
     const params = useParams();
     const [projectName, setProjectName] = React.useState('');
     const navigate = useNavigate();
+
+    const addDays = (date, days) => {
+        const result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    };
+
+    const [filterModel, setFilterModel] = useState({
+        items: [{ field: 'deadline', operator: 'onOrBefore', value: addDays(new Date(), 7) }],
+    });
+
     let id;
     if (user !== undefined) {
         id = user._id;
@@ -126,7 +138,16 @@ function Tasks({loggedIn, user}) {
     useEffect(() => {
         GetTasks();
         GetProjectName();
-    }, [id]);
+        if (_filter) {
+            //setFilter();
+            setFilterModel({
+                items: [{ field: 'deadline', operator: 'onOrBefore', value: addDays(new Date(), 7) }],
+            });
+        } else {
+            //setFilter(undefined);
+            setFilterModel(undefined);
+        }
+    }, [id, _filter]);
 
     return (
         <div>
@@ -177,6 +198,8 @@ function Tasks({loggedIn, user}) {
                         ]}
                         columnVisibilityModel={{delete: loggedIn}}
                         getRowId={(row) => row._id}
+                        filterModel={filterModel}
+                        //onFilterModelChange={(newModel) => setFilterModel(newModel)}
 
                     ></DataGrid>
                     : <p>'No tasks'</p>
