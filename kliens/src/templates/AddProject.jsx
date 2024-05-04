@@ -63,7 +63,7 @@ function AddProjectDialog({open, onClose, getProjects}) {
     }, []);
 
     const handleSubmit = () => {
-        console.log("submit");
+        // console.log("submit");
         const formData = {
             name: projectName,
             type_id: projectType,
@@ -78,15 +78,15 @@ function AddProjectDialog({open, onClose, getProjects}) {
             body: JSON.stringify(formData)
         }).then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 onClose();
                 clearForm();
                 getProjects();
             }).catch(data => {
-            console.log(data);
+            // console.log(data);
 
         })
-        console.log(formData);
+        // console.log(formData);
     }
 
     const handleProjectNameChange = (event) => {

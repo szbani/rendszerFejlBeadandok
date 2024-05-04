@@ -44,7 +44,7 @@ function DeveloperAddDialog({open, onClose, GetDevelopers,devs,getDevs}) {
 
     const handleSubmit = () => {
         const projectID = params.projectID;
-        console.log("submit");
+        // console.log("submit");
         const formData = {
             dev_id: dev
         }

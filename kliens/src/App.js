@@ -44,7 +44,7 @@ const App = () => {
     useEffect(() => {
         // console.log('asd2');
         CheckToken().then(data => {
-            console.log(data);
+            // console.log(data);
             if (data != false) {
                 setUser(data.user);
                 if (data.user.email === 'Guest') {
@@ -62,7 +62,7 @@ const App = () => {
     }, []);
 
     useEffect(() => {
-        console.log(user.email, loggedIn);
+        // console.log(user.email, loggedIn);
         // if (location !== '/login') {
         if (user.email != 'Guest' && loggedIn == false) {
             router.navigate('/login');

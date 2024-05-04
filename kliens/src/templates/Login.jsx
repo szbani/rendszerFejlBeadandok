@@ -28,7 +28,7 @@ export default function Login({setLoggedIn,setUser}) {
             })
         }).then(response => response.json())
             .then(data => {
-                console.log('login',data);
+                // console.log('login',data);
                 if (data.token.statusCode == 200) {
                     localStorage.setItem('token', data.token.token);
                     navigate('/');
