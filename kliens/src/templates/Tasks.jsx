@@ -9,7 +9,6 @@ import {useNavigate} from "react-router-dom";
 
 function Tasks({loggedIn, user, _filter}) {
     const [tasks, setTasks] = React.useState([]);
-    const [filter, setFilter] = React.useState();
     const params = useParams();
     const [projectName, setProjectName] = React.useState('');
     const navigate = useNavigate();
