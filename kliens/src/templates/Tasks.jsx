@@ -52,7 +52,7 @@ function Tasks({loggedIn, user, _filter}) {
     };
 
     const DeleteTask = (taskID) => {
-        console.log(taskID);
+        // console.log(taskID);
         fetch('http://localhost:8080/api/project/' + params.projectID + '/task/' + taskID, {
             method: 'DELETE',
             headers: {
@@ -69,7 +69,7 @@ function Tasks({loggedIn, user, _filter}) {
     }
 
     const GetTasks = () => {
-        console.log(id)
+        // console.log(id)
         const projectID = params.projectID;
         if (projectID != undefined) {
             fetch('http://localhost:8080/api/project/' + projectID + '/tasks', {
@@ -99,7 +99,7 @@ function Tasks({loggedIn, user, _filter}) {
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
+                    // console.log(data);
                     data = data.map((task) => {
                         task.user = user.name;
                         task.deadline = new Date(task.deadline);

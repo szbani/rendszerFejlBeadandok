@@ -30,7 +30,7 @@ function Developers({loggedIn}) {
             },
         }).then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 GetDevelopers();
                 getDevs();
             }).catch(data => {
@@ -47,7 +47,7 @@ function Developers({loggedIn}) {
             }
         }).then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
                 setDevs(data);
             }).catch(data => {
             setDevs([]);
@@ -66,7 +66,7 @@ function Developers({loggedIn}) {
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
+                    // console.log(data);
                     setDevelopers(data);
                     // setProjectName(data[0].project);
                 }).catch(data => {
