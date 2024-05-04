@@ -20,7 +20,7 @@ function Tasks({loggedIn, user, _filter}) {
     };
 
     const [filterModel, setFilterModel] = useState({
-        items: [{ field: 'deadline', operator: 'onOrBefore', value: addDays(new Date(), 7) }],
+        items: [{field: 'deadline', operator: 'onOrBefore', value: addDays(new Date(), 7)}],
     });
 
     let id;
@@ -137,16 +137,20 @@ function Tasks({loggedIn, user, _filter}) {
     useEffect(() => {
         GetTasks();
         GetProjectName();
+
+    }, [id]);
+
+    useEffect(() => {
         if (_filter) {
             //setFilter();
             setFilterModel({
-                items: [{ field: 'deadline', operator: 'onOrBefore', value: addDays(new Date(), 7) }],
+                items: [{field: 'deadline', operator: 'onOrBefore', value: addDays(new Date(), 7)}],
             });
         } else {
             //setFilter(undefined);
-            setFilterModel(undefined);
+            setFilterModel({items: []});
         }
-    }, [id, _filter]);
+    }, [_filter]);
 
     return (
         <div>
