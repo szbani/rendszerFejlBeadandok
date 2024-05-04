@@ -71,7 +71,7 @@ const createToken = async (req) => {
             user.email = 'Guest';
         }
         const token = jwt.sign({user}, secret, {expiresIn: '1H'});
-        return {token, statusCode: 200};
+        return {token, statusCode: 200, user: user};
     } catch (err) {
         console.error("Auth Failed: " + err);
         return {msg: 'Auth Failed', statusCode: 401};

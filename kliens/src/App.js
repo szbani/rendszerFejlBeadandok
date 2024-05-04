@@ -54,6 +54,8 @@ const App = () => {
                 }
             } else {
                 localStorage.removeItem('token');
+                setUser({});
+                setLoggedIn(false);
                 // router.navigate('/login');
             }
         })
@@ -105,7 +107,7 @@ const App = () => {
         },
         {
             path: '/login',
-            element: <Login setLoggedIn={setLoggedIn} getDeadlines={getDeadLines} />
+            element: <Login setLoggedIn={setLoggedIn} setUser={setUser} />
         },
         {
             path: '/my/tasks',
@@ -132,7 +134,7 @@ const App = () => {
                         ><HouseIcon/>
                         </IconButton> : null
                     }
-                    {user.email !== undefined ?
+                    {user.email !== undefined && user.email !== 'Guest' ?
                         <Typography variant={"h6"} component={'div'}>{user.name}</Typography>
                         :
                         <Typography variant={"h6"} component={'div'}>Redmine</Typography>

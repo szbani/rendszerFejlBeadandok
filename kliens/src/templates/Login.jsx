@@ -2,7 +2,7 @@ import {Box, Button, FormControl, Grid, TextField, Typography} from "@mui/materi
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 
-export default function Login({setLoggedIn,getDeadlines}) {
+export default function Login({setLoggedIn,setUser}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -28,12 +28,12 @@ export default function Login({setLoggedIn,getDeadlines}) {
             })
         }).then(response => response.json())
             .then(data => {
-                // console.log('login',data);
+                console.log('login',data);
                 if (data.token.statusCode == 200) {
                     localStorage.setItem('token', data.token.token);
                     navigate('/');
-                    getDeadlines(username);
                     setLoggedIn(true);
+                    setUser(data.token.user);
                 } else {
                     console.log('Auth Failed');
                 }
